@@ -1,20 +1,25 @@
 package sara.nemo.br.ufes.inf.domain;
 
 public class Esteira extends Recurso {
-	private Integer numeroEsteira;
-
-	public Integer getNumeroEsteira() {
-		return numeroEsteira;
-	}
-
-	public void setNumeroEsteira(Integer numeroEsteira) {
-		this.numeroEsteira = numeroEsteira;
-	}
-
-	public Esteira(String tipo, Boolean estaEmUso, Integer numeroEsteira) {
-		super(tipo, estaEmUso);
-		this.numeroEsteira = numeroEsteira;
+	private int idEsteira;
+	private String nome;
+	
+	public Esteira() {
+		super();
 	}
 	
-	
+	public int getIdEsteira() {
+		return idEsteira;
+	}
+	public void setIdEsteira(int idEsteira) {
+		this.idEsteira = idEsteira;
+	}
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
 }

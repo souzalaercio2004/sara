@@ -1,22 +1,39 @@
 package sara.nemo.br.ufes.inf.domain;
 
 
-public abstract class Recurso {
+public class Recurso {
+	int idRecurso;
 	String tipoRecurso;
-	private Boolean estaEmUso;
+	String localizacao;
+	Boolean estaEmUso;
+
+	public Recurso() {};
 	
-	public Recurso(String tipoRecurso, Boolean estaEmUso) {
-		super();
-		this.tipoRecurso = tipoRecurso;
-		this.estaEmUso = estaEmUso;
+	public int getIdRecurso() {
+		return idRecurso;
 	}
+
+
+	public void setIdRecurso(int idRecurso) {
+		this.idRecurso = idRecurso;
+	}
+
 
 	public String getTipoRecurso() {
 		return tipoRecurso;
 	}
 
+
 	public void setTipoRecurso(String tipoRecurso) {
 		this.tipoRecurso = tipoRecurso;
+	}
+	
+	public String getLocalizacao() {
+		return localizacao;
+	}
+
+	public void setLocalizacao(String localizacao) {
+		this.localizacao = localizacao;
 	}
 
 	public Boolean getEstaEmUso() {
@@ -26,6 +43,10 @@ public abstract class Recurso {
 	public void setEstaEmUso(Boolean estaEmUso) {
 		this.estaEmUso = estaEmUso;
 	}
+
+
+	
+	
 	
 	
 }

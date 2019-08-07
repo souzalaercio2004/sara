@@ -1,21 +1,29 @@
 package sara.nemo.br.ufes.inf.domain;
 
 public class PosicaoHeliponto extends Recurso{
-	private Integer numeroSpot;
-
-
-	public PosicaoHeliponto(String tipoRecurso, Boolean estaEmUso, Integer numeroSpot) {
-		super(tipoRecurso, estaEmUso);
-		this.numeroSpot = numeroSpot;
+	private int idPosicaoHeliponto;
+	private String nome;
+	
+	public PosicaoHeliponto() {
+		super();
 	}
 
-	public Integer getNumeroSpot() {
-		return numeroSpot;
+	public int getIdPosicaoHeliponto() {
+		return idPosicaoHeliponto;
 	}
 
-	public void setNumeroSpot(Integer numeroSpot) {
-		this.numeroSpot = numeroSpot;
+	public void setIdPosicaoHeliponto(int idPosicaoHeliponto) {
+		this.idPosicaoHeliponto = idPosicaoHeliponto;
 	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
 	
 	
 }

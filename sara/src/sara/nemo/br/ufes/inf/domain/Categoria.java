@@ -2,11 +2,26 @@ package sara.nemo.br.ufes.inf.domain;
 
 
 public class Categoria {
+	int id;
 	String tipoCategoria;
 	String classe;
 	String especificacao;
 	String passageiroOuCargueiro;
 	
+
+	public Categoria(){}
+	
+	
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	public String getTipoCategoria() {
 		return tipoCategoria;
 	}
@@ -39,6 +54,7 @@ public class Categoria {
 		this.passageiroOuCargueiro= passageiroOuCargueiro;
 	}
 	
-	Categoria(){}
-	
+	public String toString(){
+		return("id: "+this.getId()+" Categoria: "+this.getTipoCategoria()+" Especificação: "+this.getEspecificacao()+" Passageiro ou Cargueiro? "+this.getPassageiroOuCargueiro());
+	}
 }

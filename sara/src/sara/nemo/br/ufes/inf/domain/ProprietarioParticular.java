@@ -1,15 +1,23 @@
 package sara.nemo.br.ufes.inf.domain;
 
+
 public class ProprietarioParticular extends Proprietario{
+	int id;
 	boolean querAbastecimento;
 	String tipoCombustivel;
 	
-	public ProprietarioParticular(String proprietario, Aeronave aeronaves) {
-		super(proprietario, aeronaves);
-		// TODO Auto-generated constructor stub
-	}
-
+	public ProprietarioParticular(){
+		super();
+	};
 	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+
 	public boolean isQuerAbastecimento() {
 		return querAbastecimento;
 	}
@@ -22,13 +30,7 @@ public class ProprietarioParticular extends Proprietario{
 	public void setTipoCombustivel(String tipoCombustivel) {
 		this.tipoCombustivel = tipoCombustivel;
 	}
-	public ProprietarioParticular(String proprietario, Aeronave aeronaves, boolean querAbastecimento, String tipoCombustivel) {
-		
-		super(proprietario, aeronaves);
-		
-		this.querAbastecimento = querAbastecimento;
-		this.tipoCombustivel = tipoCombustivel;
-	}
+	
 	
 	
 }

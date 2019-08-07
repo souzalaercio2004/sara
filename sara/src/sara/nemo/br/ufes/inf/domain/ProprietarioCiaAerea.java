@@ -1,28 +1,29 @@
 package sara.nemo.br.ufes.inf.domain;
 
-public class ProprietarioCiaAerea extends Proprietario {
+public class ProprietarioCiaAerea extends Proprietario{
+	int idCiaAerea;
+	private String siglaCiaAerea;
 	
-	private String sigla;
-
-	public ProprietarioCiaAerea(String proprietario, Aeronave aeronaves2) {
-		super(proprietario, aeronaves2);
-		// TODO Auto-generated constructor stub
+	public ProprietarioCiaAerea(){
+		super();
 	}
-
-	public ProprietarioCiaAerea(String proprietario, Aeronave aeronaves2, String sigla) {
-		super(proprietario, aeronaves2);
-		this.sigla = sigla;
-	}
-
-	public String getSigla() {
-		return sigla;
-	}
-
-	public void setSigla(String sigla) {
-		this.sigla = sigla;
-	}
-
-
 	
+	
+	
+	public int getIdCiaAerea() {
+		return idCiaAerea;
+	}
+
+	public void setIdCiaAerea(int idCiaAerea) {
+		this.idCiaAerea = idCiaAerea;
+	}
+
+	public String getSiglaCiaAerea() {
+		return siglaCiaAerea;
+	}
+
+	public void setSiglaCiaAerea(String siglaCiaAerea) {
+		this.siglaCiaAerea = siglaCiaAerea;
+	}
 	
 }

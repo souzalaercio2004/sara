@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Movimento {
+	int id;
 	private String tipoMovimento;
 	private LocalDate data;
 	private LocalTime hora;
+	private int idOcorrenciaVoo;
+	
 	public String getTipoMovimento() {
 		return tipoMovimento;
 	}
@@ -30,5 +33,18 @@ public class Movimento {
 		this.data = data;
 		this.hora = hora;
 	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getIdOcorrenciaVoo() {
+		return idOcorrenciaVoo;
+	}
+	public void setIdOcorrenciaVoo(int idOcorrenciaVoo) {
+		this.idOcorrenciaVoo = idOcorrenciaVoo;
+	}
+	
 	
 }

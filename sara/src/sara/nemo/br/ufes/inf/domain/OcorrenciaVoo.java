@@ -2,14 +2,24 @@ package sara.nemo.br.ufes.inf.domain;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.lang.String;
 
 public class OcorrenciaVoo {
+	int idOcorrenciaVoo;
+	private int idAeronave;
 	private LocalDate data;
 	private LocalTime hora;
 	private String situacao;
-	private Aeronave aeronave;
 	
+	public OcorrenciaVoo() {};
+	
+	public int getIdOcorrenciaVoo() {
+		return idOcorrenciaVoo;
+	}
+
+	public void setIdOcorrenciaVoo(int idOcorrenciaVoo) {
+		this.idOcorrenciaVoo = idOcorrenciaVoo;
+	}
+
 	public LocalDate getData() {
 		return data;
 	}
@@ -28,19 +38,17 @@ public class OcorrenciaVoo {
 	public void setSituacao(String situacao) {
 		this.situacao = situacao;
 	}
-	
-	public Aeronave getAeronave() {
-		return aeronave;
+
+
+
+	public int getIdAeronave() {
+		return idAeronave;
 	}
-	public void setAeronave(Aeronave aeronave) {
-		this.aeronave = aeronave;
-	}
-	public OcorrenciaVoo(LocalDate data, LocalTime hora, String situacao, Aeronave aeronave) {
-		super();
-		this.data = data;
-		this.hora = hora;
-		this.situacao = situacao;
-		this.aeronave = aeronave;
+
+
+
+	public void setIdAeronave(int idAeronave) {
+		this.idAeronave = idAeronave;
 	}
 	
 }

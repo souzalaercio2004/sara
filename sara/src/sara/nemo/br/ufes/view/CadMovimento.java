@@ -2,16 +2,17 @@ package sara.nemo.br.ufes.view;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class CadMovimento extends JFrame {
 
@@ -26,7 +27,7 @@ public class CadMovimento extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void showWindow() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -55,12 +56,12 @@ public class CadMovimento extends JFrame {
 		
 		JLabel lbldata = new JLabel("data");
 		
-		data = new JTextField();
+		data = new JFormattedTextField("dd/MM/yyyy");
 		data.setColumns(10);
 		
 		JLabel lblhora = new JLabel("hora");
 		
-		hora = new JTextField();
+		hora = new JFormattedTextField("HH:mm");
 		hora.setColumns(10);
 		
 		JButton btnCancelar = new JButton("Cancelar");

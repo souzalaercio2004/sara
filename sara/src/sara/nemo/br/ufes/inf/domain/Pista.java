@@ -1,35 +1,36 @@
 package sara.nemo.br.ufes.inf.domain;
 
 public class Pista extends Recurso {
-	private String nomeDaPista;
+	int idPista;
+	private String nome;
 	private String Cabeceira;
-	
-	public Pista(String tipoRecurso, Boolean estaEmUso, String nomeDaPista, String cabeceira) {
-		super(tipoRecurso, estaEmUso);
-		this.nomeDaPista = nomeDaPista;
-		Cabeceira = cabeceira;
+
+	public Pista() {}
+
+	public int getIdPista() {
+		return idPista;
 	}
 
-
-	public String getNomeDaPista() {
-		return nomeDaPista;
+	public void setIdPista(int idPista) {
+		this.idPista = idPista;
 	}
 
-
-	public void setNomeDaPista(String nomeDaPista) {
-		this.nomeDaPista = nomeDaPista;
+	public String getNome() {
+		return nome;
 	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
 	public String getCabeceira() {
 		return Cabeceira;
 	}
 
-
 	public void setCabeceira(String cabeceira) {
 		Cabeceira = cabeceira;
-	}
+	};
 
 	
-	
+
 }

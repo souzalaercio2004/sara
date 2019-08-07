@@ -1,14 +1,10 @@
 package sara.nemo.br.ufes.inf.domain;
 
-import java.util.List;
-
-
 public class Proprietario {
-	String nomeProprietario;
-	List<Aeronave> aeronaves;// Lista de aeronaves de um proprietário
+	private int idProprietario;
+	private String nomeProprietario;
 	
-	protected Proprietario(String proprietario, Aeronave aeronaves2) {
-	}
+	public Proprietario() {};
 
 	public String getNomeProprietario() {
 		return nomeProprietario;
@@ -18,13 +14,12 @@ public class Proprietario {
 		this.nomeProprietario = nomeProprietario;
 	}
 
-	public List<Aeronave> getAeronaves() {
-		return aeronaves;
+	public int getIdProprietario() {
+		return idProprietario;
+	}
+	public void setIdProprietario(int idProprietario) {
+		this.idProprietario = idProprietario;
 	}
 
-	public void setAeronaves(List<Aeronave> aeronaves) {
-		this.aeronaves = aeronaves;
-	}
-	
 	
 }

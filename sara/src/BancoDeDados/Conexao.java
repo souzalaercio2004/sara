@@ -2,13 +2,13 @@ package BancoDeDados;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Conexao {
-	private Connection conexao= null;
-	private Statement stmt= null;
+	private Connection conexao;
+	private PreparedStatement stmt;
 	private ResultSet resultado;
 	
 	public void conectar() {
@@ -20,19 +20,46 @@ public class Conexao {
 		try {
 			Class.forName(driver);
 			this.conexao= DriverManager.getConnection(servidor, usuario, senha);
-			this.stmt= this.conexao.createStatement();
+			System.out.println("Conecetado ao Banco de Dados Sara ");
 		}catch(Exception e){
 			System.out.println("Erro: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
+	
+	public Connection getConexao() {
+		return conexao;
+	}
+
+
+	public void setConexao(Connection conexao) {
+		this.conexao = conexao;
+	}
+
+
+	public Statement getStmt() {
+		return stmt;
+	}
+
+
+	
+	public ResultSet getResultado() {
+		return resultado;
+	}
+
+
+	public void setResultado(ResultSet resultado) {
+		this.resultado = resultado;
+	}
+
+
 	public boolean testarconexao() {
 		if(this.conexao != null) {
 			return true;
 		}else return false;
 	}
-	
+	/*
 	public void listarAeronaves() throws SQLException, NullPointerException {
 		try {
 		String consulta= "SELECT * FROM Aeronave ORDER BY matricula";
@@ -45,6 +72,21 @@ public class Conexao {
 		}catch (NullPointerException n) {
 			System.out.print("Esta retornando ponteiro nulo\n");
 		}
+	} */
+	/*
+	public void listarCategoria() throws SQLException, NullPointerException {
+		try {
+		String consulta= "SELECT * FROM Categoria ORDER BY Categoriacol";
+		resultado= this.stmt.executeQuery(consulta);
+		while (this.resultado.next()) {
+			System.out.println("Categoria: "+ resultado.getString(2)+ " Classe "+ resultado.getString(3)+
+					" Especificação "+ resultado.getString(4)+ "Passageiro ou Cargueiro: "+ resultado.getString(4));
+		}
+		}catch (SQLException e){
+			e.printStackTrace();
+		}catch (NullPointerException n) {
+			System.out.print("Esta retornando ponteiro nulo\n");
+		}
 	}
-	
+	*/
 }

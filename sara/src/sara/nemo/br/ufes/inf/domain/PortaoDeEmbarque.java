@@ -1,27 +1,28 @@
 package sara.nemo.br.ufes.inf.domain;
 
 public class PortaoDeEmbarque extends Recurso{
-	private Integer numeroDoPortao;
-
+	int idPortaoDeEmbarque;
+	private String nome;
 	
-
-	public PortaoDeEmbarque(String tipoRecurso, Boolean estaEmUso, Integer numeroDoPortao) {
-		super(tipoRecurso, estaEmUso);
-		this.numeroDoPortao = numeroDoPortao;
+	public PortaoDeEmbarque() {
+		super();
 	}
 
-	public PortaoDeEmbarque(String tipoRecurso, Boolean estaEmUso) {
-		super(tipoRecurso, estaEmUso);
-		// TODO Auto-generated constructor stub
+	public int getIdPortaoDeEmbarque() {
+		return idPortaoDeEmbarque;
 	}
 
-	public Integer getNumeroDoPortao() {
-		return numeroDoPortao;
+	public void setIdPortaoDeEmbarque(int idPortaoDeEmbarque) {
+		this.idPortaoDeEmbarque = idPortaoDeEmbarque;
 	}
 
-	public void setNumeroDoPortao(Integer numeroDoPortao) {
-		this.numeroDoPortao = numeroDoPortao;
+	public String getNome() {
+		return nome;
 	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	};
+	
 	
 }

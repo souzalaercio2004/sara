@@ -1,16 +1,21 @@
 package sara.nemo.br.ufes.inf.domain;
-import java.util.Iterator;
-import java.util.List;
-
 
 public class Aeronave {
+	int id;
 	private String matricula;
 	private String tipoAsa;
-	private TipoAeronave tipoAeronave;
-	private List<Proprietario> proprietarios;
+	private int idTipoAeronave;
 	
-	protected Aeronave() {
+	public Aeronave() {
+		//this.proprietarios= new ArrayList<Proprietario>();
 	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getMatricula() {
 		return matricula;
 	}
@@ -23,24 +28,17 @@ public class Aeronave {
 	public void setTipoAsa(String tipoAsa) {
 		this.tipoAsa = tipoAsa;
 	}
-	public Iterator<Proprietario> getProprietarios() {
-		return proprietarios.iterator();
-	}
-	public void setProprietarios(Proprietario proprietarios) {
-		this.proprietarios.add(proprietarios);
-	}
 	
-	public TipoAeronave getTipoAeronave() {
-		return tipoAeronave;
+	public int getIdTipoAeronave() {
+		return idTipoAeronave;
 	}
-	public void setTipoAeronave(TipoAeronave tipoAeronave) {
-		this.tipoAeronave = tipoAeronave;
+	public void setIdTipoAeronave(int idTipoAeronave) {
+		this.idTipoAeronave = idTipoAeronave;
 	}
-	
 	public Aeronave(String matricula, String tipoAsa) {
 		this.matricula = matricula;
 		this.tipoAsa = tipoAsa;
 	}
-
+	
 	
 }

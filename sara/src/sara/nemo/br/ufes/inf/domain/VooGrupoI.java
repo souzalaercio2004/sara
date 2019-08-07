@@ -4,18 +4,53 @@ import java.time.LocalTime;
 
 
 public class VooGrupoI extends Voo{
-	Hotran dadosDoVoo;
+	int id;
+	int idHotran;
+	int numeroVoo;
 	LocalTime horaConfirmadaPouso;
 	LocalTime horaConfirmadaDecolagem;
-	ProprietarioCiaAerea ciaAerea;
 	
-	public Hotran getDadosDoVoo() {
-		return dadosDoVoo;
+	public VooGrupoI() {
+		super();
 	}
-	public void setDadosDoVoo(Hotran dadosDoVoo) {
-		this.dadosDoVoo = dadosDoVoo;
+	
+	public VooGrupoI(LocalDate dataPrevistaParaPouso, LocalTime horaPrevistaParaPouso,
+			LocalDate dataPrevistaParaDecolagem, LocalTime horaPrevistaParaDecolagem, String situacao, String origem,
+			String destino, int id, int idHotran, int numeroVoo, LocalTime horaConfirmadaPouso,
+			LocalTime horaConfirmadaDecolagem) {
+		
+		super.setDataPrevistaParaPouso(dataPrevistaParaPouso);
+		super.setHoraPrevistaParaPouso(horaPrevistaParaPouso);
+		super.setDataPrevistaParaDecolagem(dataPrevistaParaDecolagem);
+		super.setHoraPrevistaParaDecolagem(horaPrevistaParaDecolagem);
+		super.setSituacao(situacao);
+		super.setOrigem(origem);
+		super.setDestino(destino);
+		
+		this.id = id;
+		this.idHotran = idHotran;
+		this.numeroVoo = numeroVoo;
+		this.horaConfirmadaPouso = horaConfirmadaPouso;
+		this.horaConfirmadaDecolagem = horaConfirmadaDecolagem;
 	}
-
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getIdHotran() {
+		return idHotran;
+	}
+	public void setIdHotran(int idHotran) {
+		this.idHotran = idHotran;
+	}
+	public int getNumeroVoo() {
+		return numeroVoo;
+	}
+	public void setNumeroVoo(int numeroVoo) {
+		this.numeroVoo = numeroVoo;
+	}
 	public LocalTime getHoraConfirmadaPouso() {
 		return horaConfirmadaPouso;
 	}
@@ -28,23 +63,7 @@ public class VooGrupoI extends Voo{
 	public void setHoraConfirmadaDecolagem(LocalTime horaConfirmadaDecolagem) {
 		this.horaConfirmadaDecolagem = horaConfirmadaDecolagem;
 	}
-	public ProprietarioCiaAerea getCiaAerea() {
-		return ciaAerea;
-	}
-	public void setCiaAerea(ProprietarioCiaAerea ciaAerea) {
-		this.ciaAerea = ciaAerea;
-	}
 	
-	public VooGrupoI(LocalDate dataPrevistaParaPouso, LocalTime horaPrevistaParaPouso,
-			LocalDate dataPrevistaParaDecolagem, LocalTime horaPrevistaParaDecolagem, String situacao, String origem,
-			String destino, Hotran dadosDoVoo, LocalTime horaConfirmadaPouso, LocalTime horaConfirmadaDecolagem,
-			ProprietarioCiaAerea ciaAerea) {
-		super(dataPrevistaParaPouso, horaPrevistaParaPouso, dataPrevistaParaDecolagem, horaPrevistaParaDecolagem,
-				situacao, origem, destino);
-		this.dadosDoVoo = dadosDoVoo;
-		this.horaConfirmadaPouso = horaConfirmadaPouso;
-		this.horaConfirmadaDecolagem = horaConfirmadaDecolagem;
-		this.ciaAerea = ciaAerea;
-	}
+
 	
 }

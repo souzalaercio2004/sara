@@ -1,17 +1,21 @@
 package sara.nemo.br.ufes.view;
 
 import java.awt.EventQueue;
-
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import javax.swing.JButton;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 
 public class MenuPrincipal {
 
@@ -58,14 +62,18 @@ public class MenuPrincipal {
 		JMenuItem mntmCadastroDeAeronaves = new JMenuItem("Aeronaves");
 		mntmCadastroDeAeronaves.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CadAeronave cadAeronave= new CadAeronave();
-				cadAeronave.setVisible(true);
+				CadAeronave.showWindow();
 			}
 		});
 		
 		mnCadastro.add(mntmCadastroDeAeronaves);
 		
 		JMenuItem mntmCadastroDeCategoria = new JMenuItem("Categoria");
+		mntmCadastroDeCategoria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadCategoria.showWindow();
+			}
+		});
 		mntmCadastroDeCategoria.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -76,61 +84,192 @@ public class MenuPrincipal {
 		mnCadastro.add(mntmCadastroDeCategoria);
 		
 		JMenuItem mntmCadastroDeHotran = new JMenuItem("Hotran");
+		mntmCadastroDeHotran.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadHotran cadHotran= new CadHotran();
+				cadHotran.setVisible(true);
+			}
+		});
+		
+		JMenuItem mntmFrequencia = new JMenuItem("Frequencia");
+		mntmFrequencia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadFrequencia.showWindow();
+			}
+		});
+		mnCadastro.add(mntmFrequencia);
 		mnCadastro.add(mntmCadastroDeHotran);
 		
 		JMenuItem mntmCadastroDeMovimento = new JMenuItem("Movimento");
+		mntmCadastroDeMovimento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadMovimento.showWindow();
+			}
+		});
 		mnCadastro.add(mntmCadastroDeMovimento);
 		
 		JMenuItem mntmCadastroDeOcorrencia = new JMenuItem("Ocorrencia de Voo");
+		mntmCadastroDeOcorrencia.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadOcorrenciaVoo.showWindow();
+			}
+		});
 		mnCadastro.add(mntmCadastroDeOcorrencia);
 		
 		JSeparator separator = new JSeparator();
 		mnCadastro.add(separator);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Proprietário");
-		mnCadastro.add(mntmNewMenuItem);
-		
-		JMenuItem mntmCiaArea = new JMenuItem("Cia Aérea");
+		JMenuItem mntmCiaArea = new JMenuItem("Proprietario Cia Aérea");
+		mntmCiaArea.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadProprietarioCiaAerea.showWindow();
+			}
+		});
 		mnCadastro.add(mntmCiaArea);
 		
-		JMenuItem mntmParticular = new JMenuItem("Particular");
+		JMenuItem mntmParticular = new JMenuItem("Proprietario Particular");
+		mntmParticular.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadProprietarioParticular.showWindow();
+			}
+		});
 		mnCadastro.add(mntmParticular);
 		
 		JMenuItem mntmRecurso = new JMenuItem("Recurso");
+		mntmRecurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadRecurso.showWindow();
+			}
+		});
 		mnCadastro.add(mntmRecurso);
 		
 		JMenuItem mntmTipoDeAeronave = new JMenuItem("Tipo de Aeronave");
+		mntmTipoDeAeronave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadTipoAeronave.showWindow();
+			}
+		});
 		mnCadastro.add(mntmTipoDeAeronave);
 		
 		JSeparator separator_1 = new JSeparator();
 		mnCadastro.add(separator_1);
 		
 		JMenuItem mntmVoo = new JMenuItem("Voo");
+		mntmVoo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadVoo.showWindow();
+			}
+		});
 		mnCadastro.add(mntmVoo);
 		
 		JMenuItem mntmVooGrupoI = new JMenuItem("Voo Grupo I");
+		mntmVooGrupoI.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadVooGrupoI.showWindow();
+			}
+		});
 		mnCadastro.add(mntmVooGrupoI);
 		
 		JMenu mnRecursos = new JMenu("Recursos");
 		menuBar.add(mnRecursos);
 		
 		JMenuItem mntmEsteira = new JMenuItem("Esteira");
+		mntmEsteira.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadEsteira.showWindow();
+			}
+		});
 		mnRecursos.add(mntmEsteira);
 		
 		JMenuItem mntmPista_1 = new JMenuItem("Pista");
+		mntmPista_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadPista.showWindow();
+			}
+		});
 		mnRecursos.add(mntmPista_1);
 		
 		JMenuItem mntmPortoDeEmbarque_1 = new JMenuItem("Portão de Embarque");
+		mntmPortoDeEmbarque_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadPortaoDeEmbarque.showWindow();
+			}
+		});
 		mnRecursos.add(mntmPortoDeEmbarque_1);
 		
 		JMenuItem mntmPosioNoHeliponto_1 = new JMenuItem("Posição no Heliponto");
+		mntmPosioNoHeliponto_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadPosicaoHeliponto.showWindow();
+			}
+		});
 		mnRecursos.add(mntmPosioNoHeliponto_1);
 		
 		JMenuItem mntmPosioNoPatio = new JMenuItem("Posição no Patio");
+		mntmPosioNoPatio.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadPosicaoPatio.showWindow();
+			}
+		});
 		mnRecursos.add(mntmPosioNoPatio);
 		
 		JMenuItem mntmPreferenciaNoUso_1 = new JMenuItem("Preferencia no Uso de Recursos");
+		mntmPreferenciaNoUso_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadPreferenciaUsoRecursos.showWindow();
+			}
+		});
 		mnRecursos.add(mntmPreferenciaNoUso_1);
+		
+		JMenuItem mntmTiposDeRecurso = new JMenuItem("Tipos de Recurso");
+		mntmTiposDeRecurso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadRecurso.showWindow();
+			}
+		});
+		mnRecursos.add(mntmTiposDeRecurso);
+		
+		JMenuItem mntmOcorrenciaRecursos = new JMenuItem("Ocorrencia & Recursos");
+		mntmOcorrenciaRecursos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadRecursoEmOcorrenciaVoo.showWindow();
+			}
+		});
+		
+		JMenuItem mntmRecursosPorProprietario = new JMenuItem("Recursos por Proprietario");
+		mntmRecursosPorProprietario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadRecursosPorProprietario.showWindow();
+			}
+		});
+		mnRecursos.add(mntmRecursosPorProprietario);
+		mnRecursos.add(mntmOcorrenciaRecursos);
+		
+		JPanel panel = new JPanel();
+		frmMenuPrincipal.getContentPane().add(panel, BorderLayout.CENTER);
+		
+		JButton btnSair = new JButton("Sair");
+		btnSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmMenuPrincipal.setVisible(false);
+			}
+		});
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(157)
+					.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(162, Short.MAX_VALUE))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(95)
+					.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(108, Short.MAX_VALUE))
+		);
+		panel.setLayout(gl_panel);
 	}
 
 }

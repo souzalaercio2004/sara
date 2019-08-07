@@ -4,11 +4,28 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class VooGrupoII extends Voo{
+	int idVooGrupoII;
+	int idAeronave;
 	String nomeComandante;
 	String telefoneDoComandante;
 	LocalTime tempoDeSolo;
 	ProprietarioParticular proprietarioParticular;
 	
+	
+
+	public int getIdVooGrupoII() {
+		return idVooGrupoII;
+	}
+	public void setIdVooGrupoII(int idVooGrupoII) {
+		this.idVooGrupoII = idVooGrupoII;
+	}
+	
+	public int getIdAeronave() {
+		return idAeronave;
+	}
+	public void setIdAeronave(int idAeronave) {
+		this.idAeronave = idAeronave;
+	}
 	public String getNomeComandante() {
 		return nomeComandante;
 	}
@@ -38,8 +55,15 @@ public class VooGrupoII extends Voo{
 			LocalDate dataPrevistaParaDecolagem, LocalTime horaPrevistaParaDecolagem, String situacao, String origem,
 			String destino, String nomeComandante, String telefoneDoComandante, LocalTime tempoDeSolo,
 			ProprietarioParticular proprietarioParticular) {
-		super(dataPrevistaParaPouso, horaPrevistaParaPouso, dataPrevistaParaDecolagem, horaPrevistaParaDecolagem,
-				situacao, origem, destino);
+		
+		super.setDataPrevistaParaPouso(dataPrevistaParaPouso);
+		super.setHoraPrevistaParaPouso(horaPrevistaParaPouso);
+		super.setDataPrevistaParaDecolagem(dataPrevistaParaDecolagem);
+		super.setHoraPrevistaParaDecolagem(horaPrevistaParaDecolagem);
+		super.setSituacao(situacao);
+		super.setOrigem(origem);
+		super.setDestino(destino);
+		
 		this.nomeComandante = nomeComandante;
 		this.telefoneDoComandante = telefoneDoComandante;
 		this.tempoDeSolo = tempoDeSolo;
