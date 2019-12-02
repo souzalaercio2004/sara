@@ -6,16 +6,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.JSeparator;
+
+import sara.nemo.br.ufes.inf.tables.TableViewChegadas;
+import sara.nemo.br.ufes.inf.tables.TableViewPartidas;
 
 public class MenuPrincipal {
 
@@ -50,7 +50,7 @@ public class MenuPrincipal {
 	private void initialize() {
 		frmMenuPrincipal = new JFrame();
 		frmMenuPrincipal.setTitle("Menu Principal");
-		frmMenuPrincipal.setBounds(100, 100, 450, 300);
+		frmMenuPrincipal.setBounds(100, 100, 481, 406);
 		frmMenuPrincipal.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -95,6 +95,7 @@ public class MenuPrincipal {
 		mntmFrequencia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CadFrequencia.showWindow();
+			
 			}
 		});
 		mnCadastro.add(mntmFrequencia);
@@ -154,21 +155,21 @@ public class MenuPrincipal {
 		JSeparator separator_1 = new JSeparator();
 		mnCadastro.add(separator_1);
 		
-		JMenuItem mntmVoo = new JMenuItem("Voo");
-		mntmVoo.addActionListener(new ActionListener() {
+		JMenuItem mntmVooNaoRegularGrupoI = new JMenuItem("Voo Nao Regular Grupo I");
+		mntmVooNaoRegularGrupoI.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CadVoo.showWindow();
+				CadVooNaoRegularGrupoI.showWindow();
 			}
 		});
-		mnCadastro.add(mntmVoo);
+		mnCadastro.add(mntmVooNaoRegularGrupoI);
 		
-		JMenuItem mntmVooGrupoI = new JMenuItem("Voo Grupo I");
-		mntmVooGrupoI.addActionListener(new ActionListener() {
+		JMenuItem mntmVooGrupoII = new JMenuItem("Voo Grupo II");
+		mntmVooGrupoII.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CadVooGrupoI.showWindow();
+				CadVooGrupoII.showWindow();
 			}
 		});
-		mnCadastro.add(mntmVooGrupoI);
+		mnCadastro.add(mntmVooGrupoII);
 		
 		JMenu mnRecursos = new JMenu("Recursos");
 		menuBar.add(mnRecursos);
@@ -245,31 +246,42 @@ public class MenuPrincipal {
 		mnRecursos.add(mntmRecursosPorProprietario);
 		mnRecursos.add(mntmOcorrenciaRecursos);
 		
+		JMenu mnTabelas = new JMenu("Tabelas");
+		menuBar.add(mnTabelas);
+		
+		JMenuItem mntmChegadas = new JMenuItem("Chegadas");
+		mntmChegadas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TableViewChegadas.showTableViewChegadas();
+			}
+		});
+		mnTabelas.add(mntmChegadas);
+		
+		JMenuItem mntmPartidas = new JMenuItem("Partidas");
+		mntmPartidas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TableViewPartidas.showTableViewPartidas();
+			}
+		});
+		mnTabelas.add(mntmPartidas);
+		frmMenuPrincipal.getContentPane().setLayout(null);
+		
 		JPanel panel = new JPanel();
-		frmMenuPrincipal.getContentPane().add(panel, BorderLayout.CENTER);
+		panel.setBounds(0, 0, 481, 1);
+		frmMenuPrincipal.getContentPane().add(panel);
+		panel.setLayout(null);
 		
 		JButton btnSair = new JButton("Sair");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frmMenuPrincipal.setVisible(false);
+				try {
+					frmMenuPrincipal.setVisible(false);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
-		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(157)
-					.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(162, Short.MAX_VALUE))
-		);
-		gl_panel.setVerticalGroup(
-			gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(95)
-					.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(108, Short.MAX_VALUE))
-		);
-		panel.setLayout(gl_panel);
+		btnSair.setBounds(204, 250, 154, 74);
+		frmMenuPrincipal.getContentPane().add(btnSair);
 	}
-
 }

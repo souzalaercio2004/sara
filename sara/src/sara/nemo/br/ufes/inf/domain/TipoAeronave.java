@@ -10,7 +10,6 @@ public class TipoAeronave {
 	float pmd;
 	
 	public TipoAeronave() {
-		equipamento= "";
 	}
 	
 	public int getIdTipoAeronave() {
@@ -44,13 +43,6 @@ public class TipoAeronave {
 	}
 	public void setPmd(float pmd) {
 		this.pmd = pmd;
-	}
-	public TipoAeronave(String equipamento, float comprimento, float envergadura, float pmd) {
-		this.equipamento = equipamento;
-		this.comprimento = comprimento;
-		this.envergadura = envergadura;
-		this.pmd = pmd;
-	}
-	
+	}	
 	
 }

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -21,9 +23,6 @@ public class ProprietarioParticularDAO {
 		try {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
-			if (con != null) System.out.println("Conexão bem sucedida" + con);
-			
-			
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1, proprietarioParticular.getId());
 			pstm.setBoolean(2, proprietarioParticular.isQuerAbastecimento());
@@ -35,13 +34,16 @@ public class ProprietarioParticularDAO {
 			
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Proprietario particular invalido!");
+			e.printStackTrace();
 		}finally {
 			con.close();
 		}
 	}
 	
 	public void selecionar() {
-		String sql= "SELECT * FROM ProprietarioParticular ORDER BY idProprietarioParticular ASC";
+		String sql= "select idProprietarioParticular, nomeDoProprietario, querAbastecimento, combustivel "
+				+ "from ProprietarioParticular inner join Proprietario "
+				+ "where idProprietario= idProprietarioParticular order by nomeDoProprietario";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -49,15 +51,41 @@ public class ProprietarioParticularDAO {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			ResultSet result = pstm.executeQuery(sql);
+			ResultSet result = pstm.executeQuery();
 			con.commit();
 			
 			while (result.next()) {
-				System.out.println(result.getInt(1) +"  "+result.getString("nomeDoProprietario")+"  "+ result.getString("querAbastecimento")+"  "+ result.getString("combustivel"));
+				System.out.println(result.getInt(1) +"  "+result.getString("nomeDoProprietario")+"  \t"+ result.getString("querAbastecimento")+"  "+ result.getString("combustivel"));
 			}
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem propietários cadastrados!");
 		}
+	}
+	
+	public List<String> selecionarLista() {
+		List<String> proprietario= new ArrayList<String>();
+		String sql= "select idProprietarioParticular, nomeDoProprietario, querAbastecimento, combustivel "
+				+ "from ProprietarioParticular inner join Proprietario "
+				+ "where idProprietario= idProprietarioParticular order by nomeDoProprietario";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			ResultSet result = pstm.executeQuery();
+			con.commit();
+			
+			while (result.next()) {
+				proprietario.add(result.getString("nomeDoProprietario"));
+				//System.out.println(result.getInt(1) +"  "+result.getString("nomeDoProprietario")+"  \t"+ result.getString("querAbastecimento")+"  "+ result.getString("combustivel"));
+			}
+			return (proprietario);
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem propietários cadastrados!");
+		}
+		return null;
 	}
 	
 	public ProprietarioParticular selecionarById(int id) {
@@ -88,22 +116,24 @@ public class ProprietarioParticularDAO {
 	}
 	public void alterar(ProprietarioParticular proprietarioParticular)throws Exception {
 		
-		String sql = "UPDATE ProprietarioParticular SET nomeDoProprietario=?, querAbastecimento=?, combustivel=? WHERE idProprietarioParticular=? ";
+		String sql = "UPDATE ProprietarioParticular SET querAbastecimento=?, combustivel=? WHERE idProprietarioParticular=? ";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			pstm.setBoolean(2, proprietarioParticular.isQuerAbastecimento());
-			pstm.setString(3, proprietarioParticular.getTipoCombustivel());
-			pstm.setInt(4, proprietarioParticular.getId());
+			
+			pstm.setBoolean(1, proprietarioParticular.isQuerAbastecimento());
+			pstm.setString(2, proprietarioParticular.getTipoCombustivel());
+			pstm.setInt(3, proprietarioParticular.getId());
 			
 			pstm.executeUpdate();
 			
 			con.commit();
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados de proprietário");
+			e.printStackTrace();
 		}finally {
 			con.close();
 		}

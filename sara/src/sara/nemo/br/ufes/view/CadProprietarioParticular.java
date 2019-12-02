@@ -15,7 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import sara.nemo.br.ufes.inf.DAO.ProprietarioDAO;
 import sara.nemo.br.ufes.inf.DAO.ProprietarioParticularDAO;
+import sara.nemo.br.ufes.inf.domain.Proprietario;
 import sara.nemo.br.ufes.inf.domain.ProprietarioParticular;
 
 public class CadProprietarioParticular extends JFrame {
@@ -60,7 +62,7 @@ public class CadProprietarioParticular extends JFrame {
 		
 		JComboBox<String> cbxAbastecimento = new JComboBox<String>();
 		cbxAbastecimento.setModel(new DefaultComboBoxModel<String>(new String[] {"SIM", "NÃO"}));
-		cbxAbastecimento.setBounds(283, 132, 54, 24);
+		cbxAbastecimento.setBounds(283, 132, 75, 24);
 		contentPane.add(cbxAbastecimento);
 		
 		JLabel lblTipoDeCombustivel = new JLabel("Tipo de Combustivel");
@@ -84,21 +86,26 @@ public class CadProprietarioParticular extends JFrame {
 		JButton btnIncluir = new JButton("Incluir");
 		btnIncluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ProprietarioParticularDAO prop= new ProprietarioParticularDAO();
-				//nomeProprietario=  txtNomeProprietario.getText();
-				ProprietarioParticular propParticular= new ProprietarioParticular();
-				propParticular.setNomeProprietario(txtNomeProprietario.getText().toUpperCase());
+				Proprietario proprietario= new Proprietario();
+				ProprietarioDAO proprietarioDAO= new ProprietarioDAO();
 				
-				if (((String)cbxAbastecimento.getSelectedItem()) == "SIM") {// Quer abastecimento
-					propParticular.setQuerAbastecimento(true);
-					propParticular.setTipoCombustivel((String)cbxCombustivel.getSelectedItem());
-				}else propParticular.setQuerAbastecimento(false); // Não quer abastecimento
+				ProprietarioParticular propParticular= new ProprietarioParticular();
+				ProprietarioParticularDAO prop= new ProprietarioParticularDAO();
+				
+				proprietario.setNomeProprietario(txtNomeProprietario.getText().toUpperCase());
+				
 				
 				try {
+					proprietarioDAO.inserir(proprietario);
+					propParticular.setId(proprietarioDAO.selecionarMaximoID());
+					if (((String)cbxAbastecimento.getSelectedItem()) == "SIM") {// Quer abastecimento
+						propParticular.setQuerAbastecimento(true);
+						propParticular.setTipoCombustivel((String)cbxCombustivel.getSelectedItem());
+					}else propParticular.setQuerAbastecimento(false); // Não quer abastecimento
 					prop.inserir(propParticular);
-				} catch (SQLException e1) {
+				} catch (SQLException e2) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e2.printStackTrace();
 				}
 			}
 		});
@@ -128,23 +135,28 @@ public class CadProprietarioParticular extends JFrame {
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProprietarioParticularDAO prop= new ProprietarioParticularDAO();
-				
+				ProprietarioDAO proprietarioDAO= new ProprietarioDAO();
 				int id= Integer.parseInt(JOptionPane.showInputDialog("Qual o id do proprietario particular? "));
-				ProprietarioParticular proprietarioParticular=prop.selecionarById(id);
-				proprietarioParticular.setNomeProprietario(txtNomeProprietario.getText().toUpperCase());
-				String opcao= cbxAbastecimento.getSelectedItem().toString();
-				if (opcao.equals("SIM")) {
-					proprietarioParticular.setQuerAbastecimento(true);
-					proprietarioParticular.setTipoCombustivel((String) cbxCombustivel.getSelectedItem());
-				} else {
-					proprietarioParticular.setQuerAbastecimento(false);
-					proprietarioParticular.setTipoCombustivel(null);
-				}
+				
+				Proprietario proprietario= proprietarioDAO.selecionarById(id);
+				proprietario.setNomeProprietario(txtNomeProprietario.getText().toUpperCase());
+				
 				try {
+					proprietarioDAO.alterar(proprietario);
+					ProprietarioParticular proprietarioParticular=prop.selecionarById(id);
+					String opcao= cbxAbastecimento.getSelectedItem().toString();
+					if (opcao.equals("SIM")) {
+						proprietarioParticular.setQuerAbastecimento(true);
+						proprietarioParticular.setTipoCombustivel((String) cbxCombustivel.getSelectedItem());
+					} else {
+						proprietarioParticular.setQuerAbastecimento(false);
+						proprietarioParticular.setTipoCombustivel(null);
+					}
 					prop.alterar(proprietarioParticular);
-				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Alteração bem sucedida!");
+				} catch (Exception e2) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e2.printStackTrace();
 				}
 			}
 		});

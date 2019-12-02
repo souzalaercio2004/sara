@@ -4,66 +4,107 @@ import java.time.LocalTime;
 
 
 public class VooGrupoI extends Voo{
-	int id;
+	int idVooGrupoI;
+	int idVoo;
 	int idHotran;
-	int numeroVoo;
+	int numeroVooPouso;
+	int numeroVooDecolagem;
+	LocalDate dataConfirmadaPouso;
+	LocalDate dataConfirmadaDecolagem;
 	LocalTime horaConfirmadaPouso;
 	LocalTime horaConfirmadaDecolagem;
+	int idProprietarioCiaAerea;
 	
 	public VooGrupoI() {
 		super();
 	}
 	
-	public VooGrupoI(LocalDate dataPrevistaParaPouso, LocalTime horaPrevistaParaPouso,
-			LocalDate dataPrevistaParaDecolagem, LocalTime horaPrevistaParaDecolagem, String situacao, String origem,
-			String destino, int id, int idHotran, int numeroVoo, LocalTime horaConfirmadaPouso,
-			LocalTime horaConfirmadaDecolagem) {
-		
-		super.setDataPrevistaParaPouso(dataPrevistaParaPouso);
-		super.setHoraPrevistaParaPouso(horaPrevistaParaPouso);
-		super.setDataPrevistaParaDecolagem(dataPrevistaParaDecolagem);
-		super.setHoraPrevistaParaDecolagem(horaPrevistaParaDecolagem);
-		super.setSituacao(situacao);
-		super.setOrigem(origem);
-		super.setDestino(destino);
-		
-		this.id = id;
-		this.idHotran = idHotran;
-		this.numeroVoo = numeroVoo;
-		this.horaConfirmadaPouso = horaConfirmadaPouso;
-		this.horaConfirmadaDecolagem = horaConfirmadaDecolagem;
+
+	public int getIdVoo() {
+		return idVoo;
 	}
-	public int getId() {
-		return id;
+
+
+	public void setIdVoo(int idVoo) {
+		this.idVoo = idVoo;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+
+	public int getIdVooGrupoI() {
+		return idVooGrupoI;
 	}
+
+
+	public void setIdVooGrupoI(int idVooGrupoI) {
+		this.idVooGrupoI = idVooGrupoI;
+	}
+
+
 	public int getIdHotran() {
 		return idHotran;
 	}
+
 	public void setIdHotran(int idHotran) {
 		this.idHotran = idHotran;
 	}
-	public int getNumeroVoo() {
-		return numeroVoo;
+
+	public int getNumeroVooPouso() {
+		return numeroVooPouso;
 	}
-	public void setNumeroVoo(int numeroVoo) {
-		this.numeroVoo = numeroVoo;
+
+	public void setNumeroVooPouso(int numeroVooPouso) {
+		this.numeroVooPouso = numeroVooPouso;
 	}
+
+	public int getNumeroVooDecolagem() {
+		return numeroVooDecolagem;
+	}
+
+	public void setNumeroVooDecolagem(int numeroVooDecolagem) {
+		this.numeroVooDecolagem = numeroVooDecolagem;
+	}
+
+	public LocalDate getDataConfirmadaPouso() {
+		return dataConfirmadaPouso;
+	}
+
+	public void setDataConfirmadaPouso(LocalDate dataConfirmadaPouso) {
+		this.dataConfirmadaPouso = dataConfirmadaPouso;
+	}
+
+	public LocalDate getDataConfirmadaDecolagem() {
+		return dataConfirmadaDecolagem;
+	}
+
+	public void setDataConfirmadaDecolagem(LocalDate dataConfirmadaDecolagem) {
+		this.dataConfirmadaDecolagem = dataConfirmadaDecolagem;
+	}
+
 	public LocalTime getHoraConfirmadaPouso() {
 		return horaConfirmadaPouso;
 	}
+
 	public void setHoraConfirmadaPouso(LocalTime horaConfirmadaPouso) {
 		this.horaConfirmadaPouso = horaConfirmadaPouso;
 	}
+
 	public LocalTime getHoraConfirmadaDecolagem() {
 		return horaConfirmadaDecolagem;
 	}
+
 	public void setHoraConfirmadaDecolagem(LocalTime horaConfirmadaDecolagem) {
 		this.horaConfirmadaDecolagem = horaConfirmadaDecolagem;
 	}
-	
+
+
+	public int getIdProprietarioCiaAerea() {
+		return idProprietarioCiaAerea;
+	}
+
+
+	public void setIdProprietarioCiaAerea(int idProprietarioCiaAerea) {
+		this.idProprietarioCiaAerea = idProprietarioCiaAerea;
+	}
 
 	
 }

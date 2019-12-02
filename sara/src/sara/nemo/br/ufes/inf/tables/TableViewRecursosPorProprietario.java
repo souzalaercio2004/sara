@@ -2,12 +2,9 @@ package sara.nemo.br.ufes.inf.tables;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -52,43 +49,31 @@ public class TableViewRecursosPorProprietario extends JFrame {
 	public TableViewRecursosPorProprietario() {
 		setTitle("Recursos por Proprietario Cadastrados");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(10, 10, 800, 600);
+		setBounds(10, 10, 600, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		
-		JButton btnSair = new JButton("Sair");
-		btnSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
+		table = new JTable(modelo);	
+		JScrollPane scrollPane = new JScrollPane(table);
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addGroup(Alignment.LEADING, gl_contentPane.createSequentialGroup()
-							.addGap(45)
-							.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap(739, Short.MAX_VALUE)
-							.addComponent(btnSair)))
-					.addGap(189))
+					.addContainerGap(47, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 504, GroupLayout.PREFERRED_SIZE)
+					.addGap(39))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(81)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-					.addGap(48)
-					.addComponent(btnSair)
-					.addContainerGap(105, Short.MAX_VALUE))
+					.addGap(98)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 154, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(238, Short.MAX_VALUE))
 		);
 		
-		table = new JTable(modelo);		
+			
 		
 		table.setName(" ");
 		table.setForeground(Color.BLACK);
@@ -101,6 +86,14 @@ public class TableViewRecursosPorProprietario extends JFrame {
 		modelo.addColumn("Nome");
 		modelo.addColumn("Prioridade");
 		modelo.addColumn("Esta em Uso");
+		
+		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+				table.getColumnModel().getColumn(0).setPreferredWidth(200);
+				table.getColumnModel().getColumn(1).setPreferredWidth(200);
+				table.getColumnModel().getColumn(2).setPreferredWidth(100);
+				table.getColumnModel().getColumn(3).setPreferredWidth(150);
+				table.getColumnModel().getColumn(4).setPreferredWidth(150);
+				table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 		
 		RecursosPorProprietarioDAO recursosPorProprietarioDAO= new RecursosPorProprietarioDAO();
 		

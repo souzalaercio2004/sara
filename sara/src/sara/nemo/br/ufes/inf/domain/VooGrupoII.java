@@ -1,6 +1,5 @@
 package sara.nemo.br.ufes.inf.domain;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class VooGrupoII extends Voo{
@@ -9,9 +8,9 @@ public class VooGrupoII extends Voo{
 	String nomeComandante;
 	String telefoneDoComandante;
 	LocalTime tempoDeSolo;
-	ProprietarioParticular proprietarioParticular;
+	int idProprietarioParticular;
 	
-	
+	public VooGrupoII() {};
 
 	public int getIdVooGrupoII() {
 		return idVooGrupoII;
@@ -44,29 +43,15 @@ public class VooGrupoII extends Voo{
 	public void setTempoDeSolo(LocalTime tempoDeSolo) {
 		this.tempoDeSolo = tempoDeSolo;
 	}
-	public ProprietarioParticular getProprietarioParticular() {
-		return proprietarioParticular;
+
+
+	
+	public int getIdProprietarioParticular() {
+		return idProprietarioParticular;
 	}
-	public void setProprietarioParticular(ProprietarioParticular proprietarioParticular) {
-		this.proprietarioParticular = proprietarioParticular;
+
+	public void setIdProprietarioParticular(int idProprietarioParticular) {
+		this.idProprietarioParticular = idProprietarioParticular;
 	}
 	
-	public VooGrupoII(LocalDate dataPrevistaParaPouso, LocalTime horaPrevistaParaPouso,
-			LocalDate dataPrevistaParaDecolagem, LocalTime horaPrevistaParaDecolagem, String situacao, String origem,
-			String destino, String nomeComandante, String telefoneDoComandante, LocalTime tempoDeSolo,
-			ProprietarioParticular proprietarioParticular) {
-		
-		super.setDataPrevistaParaPouso(dataPrevistaParaPouso);
-		super.setHoraPrevistaParaPouso(horaPrevistaParaPouso);
-		super.setDataPrevistaParaDecolagem(dataPrevistaParaDecolagem);
-		super.setHoraPrevistaParaDecolagem(horaPrevistaParaDecolagem);
-		super.setSituacao(situacao);
-		super.setOrigem(origem);
-		super.setDestino(destino);
-		
-		this.nomeComandante = nomeComandante;
-		this.telefoneDoComandante = telefoneDoComandante;
-		this.tempoDeSolo = tempoDeSolo;
-		this.proprietarioParticular = proprietarioParticular;
-	}	
 }

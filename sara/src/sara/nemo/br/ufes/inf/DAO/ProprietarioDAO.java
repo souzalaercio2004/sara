@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import sara.nemo.br.ufes.inf.domain.Proprietario;
-import sara.nemo.br.ufes.inf.domain.ProprietarioCiaAerea;
 import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class ProprietarioDAO {
@@ -154,23 +153,24 @@ public class ProprietarioDAO {
 		return (prop);
 	}
 	
-	public void alterar (ProprietarioCiaAerea proprietarioCiaAerea) throws Exception {
+	public void alterar (Proprietario proprietario) throws Exception {
 		
-		String sql = "UPDATE ProprietarioCiaAerea SET Proprietario_idProprietario=?, sigla=? WHERE idCiaAerea=?";
+		String sql = "UPDATE Proprietario SET nomeDoProprietario=? WHERE idProprietario=?";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
-			
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, proprietarioCiaAerea.getIdProprietario());
-			pstm.setString(2, proprietarioCiaAerea.getSiglaCiaAerea());
-			pstm.setInt(3, proprietarioCiaAerea.getIdCiaAerea());
+			pstm.setString(1, proprietario.getNomeProprietario());
+			pstm.setInt(2, proprietario.getIdProprietario());
 			
 			pstm.executeUpdate();
-			
+			con.commit();
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha na atualização do proprietario");
+			//JOptionPane.showMessageDialog(null, "Falha na atualização do proprietario");
+			e.printStackTrace();
+			
 		}finally {
 			con.close();
 		}

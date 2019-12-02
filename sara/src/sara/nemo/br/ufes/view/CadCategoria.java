@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import sara.nemo.br.ufes.inf.DAO.CategoriaDAO;
 import sara.nemo.br.ufes.inf.domain.Categoria;
+import sara.nemo.br.ufes.inf.tables.TableViewCategoria;
 
 
 public class CadCategoria extends JFrame {
@@ -154,7 +155,7 @@ public class CadCategoria extends JFrame {
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				categoriaDAO.selecionar();
+				TableViewCategoria.showTableViewCategoria();
 			}
 		});
 		btnConsultar.setBounds(12, 306, 117, 25);

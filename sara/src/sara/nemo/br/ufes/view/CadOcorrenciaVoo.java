@@ -24,9 +24,12 @@ import sara.nemo.br.ufes.inf.DAO.AeronaveDAO;
 import sara.nemo.br.ufes.inf.DAO.OcorrenciaVooDAO;
 import sara.nemo.br.ufes.inf.domain.Aeronave;
 import sara.nemo.br.ufes.inf.domain.OcorrenciaVoo;
+import sara.nemo.br.ufes.inf.tables.TableViewOcorrenciaVoo;
 
 public class CadOcorrenciaVoo extends JFrame {
-
+	OcorrenciaVoo ocorrenciaVoo= new OcorrenciaVoo();
+	OcorrenciaVooDAO ocorrenciaVooDAO= new OcorrenciaVooDAO();
+	AeronaveDAO aeronaveDAO= new AeronaveDAO();
 	/**
 	 * 
 	 */
@@ -59,7 +62,7 @@ public class CadOcorrenciaVoo extends JFrame {
 	public CadOcorrenciaVoo() {
 		setTitle("CADASTRO DE OCORRENCIAS DE VOO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 411);
+		setBounds(100, 100, 450, 351);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -90,13 +93,10 @@ public class CadOcorrenciaVoo extends JFrame {
 		JButton btnIncluir = new JButton("Incluir");
 		btnIncluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OcorrenciaVoo ocorrenciaVoo= new OcorrenciaVoo();
-				OcorrenciaVooDAO ocorrenciaVooDAO= new OcorrenciaVooDAO();
-				AeronaveDAO AeronaveDAO= new AeronaveDAO();
 				ocorrenciaVoo.setData(Converte.converteStringToLocalDateNoFormatoDDMMAAAA(txtdata.getText(), "dd/MM/yyyy"));
 				ocorrenciaVoo.setHora(LocalTime.parse(txthora.getText()));
 				String matricula= txtMatricula.getText();
-				Aeronave aero= AeronaveDAO.selecionarByMatricula(matricula);
+				Aeronave aero= aeronaveDAO.selecionarByMatricula(matricula);
 				
 				ocorrenciaVoo.setIdAeronave(aero.getId());
 				ocorrenciaVoo.setSituacao((txtSituacao.getSelectedItem().toString()));
@@ -113,6 +113,26 @@ public class CadOcorrenciaVoo extends JFrame {
 		});
 		
 		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int id = Integer.parseInt(JOptionPane.showInputDialog("Digite o código da ocorrencia de Voo: "));
+				ocorrenciaVoo= ocorrenciaVooDAO.selecionarById(id);
+				
+				ocorrenciaVoo.setData(Converte.converteStringToLocalDateNoFormatoDDMMAAAA(txtdata.getText(), "dd/MM/yyyy"));
+				ocorrenciaVoo.setHora(LocalTime.parse(txthora.getText()));
+				String matricula= txtMatricula.getText().toString();
+				
+				Aeronave aero= aeronaveDAO.selecionarByMatricula(matricula);
+				ocorrenciaVoo.setIdAeronave(aero.getId());
+				ocorrenciaVoo.setSituacao((txtSituacao.getSelectedItem().toString()));
+				try {
+					ocorrenciaVooDAO.alterar(ocorrenciaVoo);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
@@ -124,56 +144,66 @@ public class CadOcorrenciaVoo extends JFrame {
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				OcorrenciaVooDAO ocorrenciaVooDAO= new OcorrenciaVooDAO();
-				ocorrenciaVooDAO.selecionar();
+				TableViewOcorrenciaVoo.showTableViewOcorrenciaVoo();
 			}
 		});
 		
 		JButton btnExcluir = new JButton("Excluir");
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int id = Integer.parseInt(JOptionPane.showInputDialog("Digite o código da ocorrencia de Voo para excluir: "));
+				ocorrenciaVooDAO.apagar(id);
 			}
 		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(138)
-					.addComponent(lbldata)
-					.addGap(12)
-					.addComponent(txtdata, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(138)
-					.addComponent(lblhora)
-					.addGap(12)
-					.addComponent(txthora, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(12)
-					.addComponent(lblaeronave)
-					.addGap(12)
-					.addComponent(txtMatricula, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(110)
-					.addComponent(lblsituacao)
-					.addGap(12)
-					.addComponent(txtSituacao, GroupLayout.PREFERRED_SIZE, 209, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(45)
-					.addComponent(btnIncluir, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(btnAlterar)
-					.addGap(6)
-					.addComponent(btnCancelar))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(53)
-					.addComponent(btnConsultar)
-					.addGap(18)
-					.addComponent(btnExcluir))
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(12)
+							.addComponent(lblaeronave)
+							.addGap(12)
+							.addComponent(txtMatricula, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(138)
+							.addComponent(lbldata)
+							.addGap(12)
+							.addComponent(txtdata, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(138)
+							.addComponent(lblhora)
+							.addGap(12)
+							.addComponent(txthora, GroupLayout.PREFERRED_SIZE, 52, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(110)
+							.addComponent(lblsituacao)
+							.addGap(12)
+							.addComponent(txtSituacao, GroupLayout.PREFERRED_SIZE, 209, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(42)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(btnIncluir, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnAlterar)
+									.addGap(6)
+									.addComponent(btnCancelar))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(8)
+									.addComponent(btnConsultar)
+									.addGap(18)
+									.addComponent(btnExcluir)))))
+					.addContainerGap(48, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(67)
+					.addGap(30)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblaeronave)
+						.addComponent(txtMatricula, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(2)
@@ -185,17 +215,13 @@ public class CadOcorrenciaVoo extends JFrame {
 							.addGap(4)
 							.addComponent(lblhora))
 						.addComponent(txthora, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(6)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblaeronave)
-						.addComponent(txtMatricula, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(6)
+					.addGap(31)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
 							.addGap(2)
 							.addComponent(lblsituacao))
 						.addComponent(txtSituacao, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(116)
+					.addGap(63)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnIncluir)
 						.addComponent(btnAlterar)
@@ -203,7 +229,8 @@ public class CadOcorrenciaVoo extends JFrame {
 					.addGap(26)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addComponent(btnConsultar)
-						.addComponent(btnExcluir)))
+						.addComponent(btnExcluir))
+					.addGap(96))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

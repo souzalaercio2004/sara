@@ -40,7 +40,7 @@ public class ProprietarioCiaAereaDAO {
 	}
 	
 	public void selecionar() {
-		String sql= "SELECT * FROM ProprietarioCiaAerea inner join Proprietario ORDER BY idCiaAerea ASC";
+		String sql= "SELECT * FROM ProprietarioCiaAerea inner join Proprietario where Proprietario.idProprietario=ProprietarioCiaAerea.idCiaAerea ORDER BY idCiaAerea ASC";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;

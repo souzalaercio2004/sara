@@ -6,6 +6,8 @@ import java.time.LocalTime;
 
 public class Voo {
 	int idVoo;
+	int idAeronave;
+	private int idCategoria;
 	private LocalDate dataPrevistaParaPouso;
 	private LocalTime horaPrevistaParaPouso;
 	private LocalDate dataPrevistaParaDecolagem;
@@ -13,29 +15,10 @@ public class Voo {
 	private String situacao;
 	private String origem;
 	private String destino;
-	private Categoria categoria;
 	private OcorrenciaVoo ocorrenciaDoVoo;
 
 	public Voo() {}
 	
-	public Voo(int idVoo, LocalDate dataPrevistaParaPouso, LocalTime horaPrevistaParaPouso,
-			LocalDate dataPrevistaParaDecolagem, LocalTime horaPrevistaParaDecolagem, String situacao, String origem,
-			String destino, Categoria categoria, OcorrenciaVoo ocorrenciaDoVoo) {
-		super();
-		this.idVoo = idVoo;
-		this.dataPrevistaParaPouso = dataPrevistaParaPouso;
-		this.horaPrevistaParaPouso = horaPrevistaParaPouso;
-		this.dataPrevistaParaDecolagem = dataPrevistaParaDecolagem;
-		this.horaPrevistaParaDecolagem = horaPrevistaParaDecolagem;
-		this.situacao = situacao;
-		this.origem = origem;
-		this.destino = destino;
-		this.categoria = categoria;
-		this.ocorrenciaDoVoo = ocorrenciaDoVoo;
-	}
-
-
-
 	public int getIdVoo() {
 		return idVoo;
 	}
@@ -43,6 +26,22 @@ public class Voo {
 		this.idVoo = idVoo;
 	}
 	
+	public int getIdAeronave() {
+		return idAeronave;
+	}
+	
+	public int getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(int idCategoria) {
+		this.idCategoria = idCategoria;
+	}
+
+	public void setIdAeronave(int idAeronave) {
+		this.idAeronave = idAeronave;
+	}
+
 	public LocalDate getDataPrevistaParaPouso() {
 		return dataPrevistaParaPouso;
 	}
@@ -84,12 +83,6 @@ public class Voo {
 	}
 	public void setDestino(String destino) {
 		this.destino = destino;
-	}
-	public Categoria getCategoria() {
-		return categoria;
-	}
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
 	}
 	public OcorrenciaVoo getOcorrenciaDoVoo() {
 		return ocorrenciaDoVoo;

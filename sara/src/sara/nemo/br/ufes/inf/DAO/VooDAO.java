@@ -11,32 +11,34 @@ import javax.swing.JOptionPane;
 
 import sara.nemo.br.ufes.inf.domain.Voo;
 import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
+import sara.nemo.br.ufes.view.Converte;
 
 public class VooDAO {
 	public void inserir(Voo voo)throws SQLException {
-		String sql= "INSERT INTO Voo(Categoria_idCategoria, OcorrenciaVoo_idOcorrenciaVoo, dataPrevistaPouso, "
-				+ "horaPrevistaPouso, dataPrevistaDecolagem, horaPrevistaDecolagem, situacao, origem, destino)"+
-					"VALUES(?, ?, ?, ?)";
+		String sql= "INSERT INTO Voo(Aeronave_idAeronave, dataPrevistaPouso, horaPrevistaPouso, "
+				+ "dataPrevistaDecolagem, horaPrevistaDecolagem, situacao, origem, destino, Categoria_idCategoria)"+
+					"VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		
 		try {
 			con= ConnectionFactory.criarConexao();
-			if (con != null) System.out.println("Conexão bem sucedida" + con);
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, voo.getCategoria().getId());
-			pstm.setInt(2, voo.getOcorrenciaDoVoo().getIdOcorrenciaVoo());
-			pstm.setDate(3, Date.valueOf(voo.getDataPrevistaParaPouso()));
-			pstm.setTime(4, Time.valueOf(voo.getHoraPrevistaParaPouso()));
-			pstm.setDate(5, Date.valueOf(voo.getDataPrevistaParaDecolagem()));
-			pstm.setTime(6, Time.valueOf(voo.getHoraPrevistaParaDecolagem()));
-			pstm.setString(7, voo.getSituacao());
-			pstm.setObject(8, voo.getOrigem());
-			pstm.setObject(9, voo.getDestino());
+			pstm.setInt(1, voo.getIdAeronave());
+			pstm.setDate(2, Date.valueOf(voo.getDataPrevistaParaPouso()));
+			pstm.setTime(3, Time.valueOf(voo.getHoraPrevistaParaPouso()));
+			pstm.setDate(4, Date.valueOf(voo.getDataPrevistaParaDecolagem()));
+			pstm.setTime(5, Time.valueOf(voo.getHoraPrevistaParaDecolagem()));
+			pstm.setString(6, voo.getSituacao());
+			pstm.setString(7, voo.getOrigem());
+			pstm.setString(8, voo.getDestino());
+			pstm.setInt(9,  voo.getIdCategoria());
 			
 			pstm.execute();
+			con.commit();
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Voo invalido!");
+			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Voo invalido!" + 40);
 		}finally {
 			con.close();
 		}
@@ -59,51 +61,90 @@ public class VooDAO {
 		}
 	}
 	
-	public void selecionarById(int id) {
-		String sql= "SELECT * FROM Voo WHERE idVoo= ?";
+	public int selecionarMaximoID() {
+		String sql= "SELECT MAX(idVoo) FROM Voo";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			pstm.setLong(1, id);
-			ResultSet result = pstm.executeQuery(sql);
-			
-			while (result.next()) {
-				System.out.println(result.getLong("idVoo") +"  "+result.getString("Categoria_idCategoria")+"  "
-						+ result.getString("OcorrenciaVoo_idOcorrenciaVoo")+"  "+result.getString("dataPrevistaPouso")+"  "
-						+ result.getString("horaPrevistaPouso")+"  "+result.getString("dataPrevistaDecolagem")+"  "
-						+ result.getString("horaPrevistaDecolagem")+"  "+result.getString("situacao")+"  "+result.getString("origem"));
+			ResultSet result = pstm.executeQuery();
+			con.commit();
+			if (result.next()) {
+				return (result.getInt(1));
 			}
 		}catch (Exception e){
-			JOptionPane.showMessageDialog(null, "Não existe voo cadastrad0 com este id! "+ id);
+			JOptionPane.showMessageDialog(null, "Não existem voos cadastrados!" + 77);
+			e.printStackTrace();	
 		}
+		return (0);
 	}
-	public void alterar(Voo voo)throws Exception {
-		
-		String sql = "UPDATE Voo SET Categoria_idCategoria=?, OcorrenciaVoo_idOcorrenciaVoo=?, dataPrevistaPouso=?"
-				+ " horaPrevistaPouso=?, dataPrevistaDecolagem=?, horaPrevistaDecolagem=? situacao=?, origem=? , destino=? WHERE idVoo=?";
+	
+	
+	public Voo selecionarById(int id) {
+		String sql= "SELECT * FROM Voo WHERE idVoo= ?";
+		Voo voo= new Voo();
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1, id);
+			ResultSet result = pstm.executeQuery();
+			
+			while (result.next()) {
+				voo.setIdVoo(result.getInt("idVoo"));
+				voo.setIdAeronave(result.getInt("Aeronave_IdAeronave"));
+				voo.setDataPrevistaParaPouso(Converte.converterJavaSqlDateToLocalDate(result.getDate("dataPrevistaPouso")));
+				voo.setHoraPrevistaParaPouso(Converte.converterJavaSqlTimeToLocalTime(result.getTime("horaPrevistaPouso")));
+				voo.setDataPrevistaParaDecolagem(Converte.converterJavaSqlDateToLocalDate(result.getDate("dataPrevistaDecolagem")));
+				voo.setHoraPrevistaParaDecolagem(Converte.converterJavaSqlTimeToLocalTime(result.getTime("horaPrevistaDecolagem")));
+				voo.setSituacao(result.getString("situacao"));
+				voo.setOrigem(result.getString("origem"));
+				voo.setDestino(result.getString("destino"));
+				voo.setIdCategoria(result.getInt("Categoria_idCategoria"));
+			}
+			con.commit();
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existe voo cadastrado com este id! "+ id);
+			e.printStackTrace();
+			return null;
+		}
+		return voo;
+	}
+	
+	public void alterar(Voo voo)throws Exception {
+		
+		String sql = "UPDATE Voo SET Aeronave_idAeronave= ?, dataPrevistaPouso= ?, horaPrevistaPouso= ?, dataPrevistaDecolagem= ?,"
+				+ "horaPrevistaDecolagem= ?, situacao= ?, origem= ?, destino= ?, Categoria_idCategoria= ? WHERE idVoo= ?";
+		Connection con= null;
+		PreparedStatement pstm = null;
+		
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
 			
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, voo.getCategoria().getId());
-			pstm.setInt(2, voo.getOcorrenciaDoVoo().getIdOcorrenciaVoo());
-			pstm.setDate(3, Date.valueOf(voo.getDataPrevistaParaPouso()));
-			pstm.setTime(4, Time.valueOf(voo.getHoraPrevistaParaPouso()));
-			pstm.setDate(5, Date.valueOf(voo.getDataPrevistaParaDecolagem()));
-			pstm.setTime(6, Time.valueOf(voo.getHoraPrevistaParaDecolagem()));
-			pstm.setString(7, voo.getSituacao());
-			pstm.setString(8, voo.getOrigem());
-			pstm.setString(9, voo.getDestino());
-	
-			pstm.executeUpdate();
+			pstm.setInt(1, voo.getIdAeronave());
 			
+			pstm.setDate(2, Date.valueOf(voo.getDataPrevistaParaPouso()));
+			pstm.setTime(3, Time.valueOf(voo.getHoraPrevistaParaPouso()));
+			pstm.setDate(4, Date.valueOf(voo.getDataPrevistaParaDecolagem()));
+			pstm.setTime(5, Time.valueOf(voo.getHoraPrevistaParaDecolagem()));
+			pstm.setString(6, voo.getSituacao());
+			pstm.setString(7, voo.getOrigem());
+			pstm.setString(8, voo.getDestino());
+			pstm.setInt(9, voo.getIdCategoria());
+			pstm.setInt(10,  voo.getIdVoo());
+			
+			pstm.executeUpdate();
+			con.commit();
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados do voo");
+			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados do voo ");
+			e.printStackTrace();
 		}finally {
 			con.close();
 		}
@@ -117,15 +158,17 @@ public class VooDAO {
 		
 		try {
 			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1, id);
 			
-			int linhas= pstm.executeUpdate(sql);
-			if (linhas> 0) {
-				JOptionPane.showMessageDialog(null, "Voo excluido com sucesso!");
-				}
+			pstm.executeUpdate();
+			
+			JOptionPane.showMessageDialog(null, "Voo excluido com sucesso!");
+			con.commit();
 			}catch (Exception e){
 				JOptionPane.showMessageDialog(null, "Não existem voos com este id: "+ id);
+				e.printStackTrace();
 			}
 		}
 }

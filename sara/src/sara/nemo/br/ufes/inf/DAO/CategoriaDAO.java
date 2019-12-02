@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import sara.nemo.br.ufes.inf.domain.Categoria;
 import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
+import sara.nemo.br.ufes.inf.item.ItemCategoria;
 
 public class CategoriaDAO {
 	public void inserir(Categoria cat)throws SQLException {
@@ -36,8 +39,58 @@ public class CategoriaDAO {
 	}
 	
 	public void selecionar() {
-		String sql= "SELECT * FROM Categoria ORDER BY classe ASC";
+		String sql= "SELECT * FROM Categoria ORDER BY idCategoria ASC";
 		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			ResultSet result = pstm.executeQuery();
+			
+			while (result.next()) {
+				System.out.println(result.getInt(1) + "\t" +String.format("%-15s", result.getString("classe"))+ String.format("%-12s", result.getString("passageiroOuCargueiro"))+ String.format("%-9s", result.getString("especificacao"))+ "\t"+ result.getString("tipo"));
+			}
+			con.commit();
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
+			e.printStackTrace();
+			
+		}
+	}
+	public List<Categoria> selecionarListaCategoria() {
+		String sql= "select * from Categoria order by tipo asc, passageiroOuCargueiro asc, classe asc";
+		List<Categoria> listaCategoria= new ArrayList<Categoria>();
+		Categoria cat;
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+
+			pstm= con.prepareStatement(sql);
+			ResultSet result = pstm.executeQuery(sql);
+			while (result.next()) {
+				cat= new Categoria();
+				cat.setId(result.getInt(1));
+				cat.setClasse(result.getString("classe"));
+				cat.setEspecificacao(result.getString("especificacao"));
+				cat.setPassageiroOuCargueiro(result.getString("passageiroOuCargueiro"));
+				cat.setTipoCategoria(result.getString("tipo"));
+				listaCategoria.add(cat);
+			}
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
+			e.printStackTrace();
+		}
+		
+		return listaCategoria;
+	}
+	public List<ItemCategoria> selecionarLista() {
+		String sql= "SELECT * FROM Categoria ORDER BY especificacao ASC";
+		Categoria cat;
+		List<ItemCategoria>  lista= new ArrayList<ItemCategoria>();
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
@@ -48,13 +101,23 @@ public class CategoriaDAO {
 			ResultSet result = pstm.executeQuery(sql);
 			
 			while (result.next()) {
-				System.out.println(result.getInt(1) + "\t" +String.format("%-15s", result.getString("classe"))+ String.format("%-12s", result.getString("passageiroOuCargueiro"))+ String.format("%-9s", result.getString("especificacao"))+ "\t"+ result.getString("tipo"));
+				cat= new Categoria();
+				cat.setId(result.getInt(1));
+				cat.setClasse(result.getString("classe"));
+				cat.setEspecificacao(result.getString("especificacao"));
+				cat.setPassageiroOuCargueiro(result.getString("passageiroOuCargueiro"));
+				cat.setTipoCategoria(result.getString("tipo"));
+				ItemCategoria item= new ItemCategoria(cat);
+				lista.add(item);
+				
 			}
+			return lista;
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
 			e.printStackTrace();
 			
 		}
+		return null;
 	}
 	
 	public Categoria selecionarById(int id) {

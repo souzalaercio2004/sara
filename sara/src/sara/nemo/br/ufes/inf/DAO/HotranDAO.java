@@ -44,7 +44,9 @@ public class HotranDAO {
 		}
 	}
 	public void selecionar() throws SQLException {
-		String sql= "SELECT * FROM sara.Hotran inner join sara.Frequencia where Frequencia.idFrequencia=Hotran.idFrequencia ORDER BY idHotran ASC";
+		String sql= "select sigla, numVooPousa, horarioPrevistoPouso, escalasOrigem, domingo, segundaFeira, tercaFeira, quartaFeira, quintaFeira, sextaFeira, sabado, "
+				+ "	sigla, numVooDecola, horarioPrevistoDecolagem, escalasDestino, domingo, segundaFeira, tercaFeira, quartaFeira, quintaFeira, sextaFeira, sabado, inicioVigencia, fimVigencia"
+				+ " from Hotran inner join ProprietarioCiaAerea inner join Frequencia where Hotran.idCiaAerea= ProprietarioCiaAerea.idCiaAerea and Hotran.idFrequencia= Frequencia.idFrequencia ";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -57,14 +59,14 @@ public class HotranDAO {
 			while (result.next()) {
 				
 				
-				System.out.println(result.getInt("idHotran") +"  "+result.getInt("idCiaAerea")+"  "+result.getInt("idFrequencia")+"  "+result.getString("numVooPousa")
-				+" "+result.getInt("numVooDecola") +"  "+result.getTime("horarioPrevistoPouso")
-				+"  "+result.getTime("horarioPrevistoDecolagem")+" \t"+result.getString("escalasOrigem")
-				+"  \t"+result.getString("escalasDestino")+"  "+result.getDate("inicioVigencia")
-				+"  "+result.getDate("fimVigencia")
+				System.out.println(result.getString("sigla") +"  "+result.getInt("numVooPousa")+"  "+result.getTime("horarioPrevistoPouso")+"  "+result.getString("escalasOrigem").toUpperCase()
+				+" "+result.getInt("Domingo")+" "+result.getInt("SegundaFeira")+" "+result.getInt("TercaFeira")+" "+result.getInt("QuartaFeira")+" "+result.getInt("QuintaFeira")+" "+result.getInt("SextaFeira")
+				+" "+result.getInt("Sabado")
+				+" "+result.getInt("numVooDecola") 
+				+"  "+result.getTime("horarioPrevistoDecolagem")+" \t"+result.getString("escalasDestino").toUpperCase()
 				+" "+result.getInt("Domingo")+" "+result.getInt("SegundaFeira")+" "+result.getInt("TercaFeira")
 				+" "+result.getInt("QuartaFeira")+" "+result.getInt("QuintaFeira")+" "+result.getInt("SextaFeira")
-				+" "+result.getInt("Sabado"));
+				+" "+result.getInt("Sabado")+"  "+result.getDate("inicioVigencia")+"  "+result.getDate("fimVigencia"));
 			}
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem Hotrans cadastradas!");

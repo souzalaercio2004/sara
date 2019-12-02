@@ -47,14 +47,15 @@ public class TipoAeronaveDAO {
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			ResultSet result = pstm.executeQuery(sql);
+			ResultSet result = pstm.executeQuery();
 			while (result.next()) {
 				System.out.println(String.format("%-8s", result.getInt(1)) +String.format("%-10s", result.getString("equipamento"))+ result.getString("comprimento") +
 						"\t"+result.getString("envergadura")+"\t"+ result.getString("pmd"));
 				
 			} 
-			
+			con.commit();
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem tipos de aeronave cadastrados!");
 		}

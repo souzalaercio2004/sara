@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.acessorios.AcessoriosOcorrenciaVoo;
 import sara.nemo.br.ufes.inf.domain.OcorrenciaVoo;
 import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 import sara.nemo.br.ufes.view.Converte;
@@ -39,25 +42,45 @@ public class OcorrenciaVooDAO {
 			con.close();
 		}
 	}
-	public void selecionar() {
-		String sql= "SELECT * FROM OcorrenciaVoo ORDER BY idOcorrenciaVoo ASC";
+	public List<AcessoriosOcorrenciaVoo> selecionarLista() {
+		String sql= "select idOcorrenciaVoo, matricula, equipamento, data, hora, situacao "
+				+ "from OcorrenciaVoo inner join Aeronave inner join TipoAeronave "
+				+ "where Aeronave_idAeronave= idAeronave and"
+				+ " idTipoAeronave= TipoAeronave_idTipoAeronave ORDER BY idOcorrenciaVoo ASC";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
+		List<AcessoriosOcorrenciaVoo> lista= new ArrayList<AcessoriosOcorrenciaVoo>();
+		AcessoriosOcorrenciaVoo acessorios;
 		try {
 			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			ResultSet result = pstm.executeQuery(sql);
+			ResultSet result = pstm.executeQuery();
 			
 			while (result.next()) {
-				System.out.println(result.getInt(1) +"  "+result.getString("data")+"  "+ result.getString("hora")+"  "+ result.getString("situacao")+"  "+ result.getString("Aeronave_idAeronave"));
+				acessorios= new AcessoriosOcorrenciaVoo();
+				acessorios.setIdOcorrenciaVoo(result.getInt("idOcorrenciaVoo"));
+				acessorios.setMatricula(result.getString("matricula"));
+				acessorios.setEquipamento(result.getString("equipamento"));
+				acessorios.setData(Converte.converterJavaSqlDateToLocalDate(result.getDate("data")));
+				acessorios.setHora(Converte.converterJavaSqlTimeToLocalTime(result.getTime("hora")));
+				acessorios.setSituacao(result.getString("situacao"));
+				lista.add(acessorios);
+				
 			}
+			con.commit();
+			return lista;
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem este tipo de ocorrência cadastrada!");
+			e.printStackTrace();
+			
 		}
+		return null;
 	}
 	
-	public void selecionarById(int id) {
+	public OcorrenciaVoo selecionarById(int id) {
+		OcorrenciaVoo ocorrenciaVoo= new OcorrenciaVoo();
 		String sql= "SELECT * FROM OcorrenciaVoo WHERE idOcorrenciaVoo= ?";
 		
 		Connection con= null;
@@ -66,16 +89,22 @@ public class OcorrenciaVooDAO {
 			con= ConnectionFactory.criarConexao();
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1, id);
-			ResultSet result = pstm.executeQuery(sql);
+			ResultSet result = pstm.executeQuery();
 			
 			while (result.next()) {
-				System.out.println(result.getLong("idOcorrenciaVoo") +"  "+result.getString("data")+"  "
-						+ result.getString("hora")+"  "+ result.getString("situacao")+"  "
-						+ result.getString("hora")+"  "+ result.getString("Aeronave_idAeronave"));
+				ocorrenciaVoo.setIdOcorrenciaVoo(result.getInt("idOcorrenciaVoo"));
+				ocorrenciaVoo.setIdAeronave(result.getInt("Aeronave_idAeronave"));
+				ocorrenciaVoo.setData(Converte.converterJavaSqlDateToLocalDate(result.getDate("data")));
+				ocorrenciaVoo.setHora(Converte.converterJavaSqlTimeToLocalTime(result.getTime("hora")));
+				ocorrenciaVoo.setSituacao(result.getString("situacao"));
 			}
+			return ocorrenciaVoo;
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existe ocorrencia cadastrada com este id!");
+			e.printStackTrace();
+			
 		}
+		return null;
 	}
 	public void alterar(OcorrenciaVoo ocorrenciaVoo)throws Exception {
 		
@@ -110,13 +139,14 @@ public class OcorrenciaVooDAO {
 		
 		try {
 			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1, id);
 			
 			pstm.executeUpdate();
 			con.commit();
 			}catch (Exception e){
-				JOptionPane.showMessageDialog(null, "Não existe ocorrência de voo com esta matricula: "+ id);
+				JOptionPane.showMessageDialog(null, "Não existe ocorrência de voo com este id: "+ id);
 			}
 		}
 }

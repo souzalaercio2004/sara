@@ -26,6 +26,7 @@ import sara.nemo.br.ufes.inf.DAO.RecursoDAO;
 import sara.nemo.br.ufes.inf.DAO.RecursosPorProprietarioDAO;
 import sara.nemo.br.ufes.inf.domain.RecursosPorProprietario;
 import sara.nemo.br.ufes.inf.tables.TableViewRecursosPorProprietario;
+import javax.swing.SwingConstants;
 
 
 public class CadRecursosPorProprietario extends JFrame {
@@ -68,14 +69,16 @@ public class CadRecursosPorProprietario extends JFrame {
 	public CadRecursosPorProprietario() {
 		setTitle("PRIORIDADE NO USO DE RECURSOS POR PROPRIETÁRIO");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 469);
+		//setBounds(100, 100, 450, 469);
+		setBounds(100, 100, 600, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel lblProprietario = new JLabel("Proprietário");
-		lblProprietario.setBounds(49, 65, 110, 15);
+		lblProprietario.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblProprietario.setBounds(63, 65, 96, 15);
 		contentPane.add(lblProprietario);
 		
 		cbxProprietario = new JComboBox<String>();
@@ -87,20 +90,22 @@ public class CadRecursosPorProprietario extends JFrame {
 			cbxProprietario.addItem(p);
 		}
 		
-		JLabel lblTipoDeRecurso = new JLabel("Tipo de Recurso");
-		lblTipoDeRecurso.setBounds(49, 116, 113, 15);
+		JLabel lblTipoDeRecurso = new JLabel("Recurso");
+		lblTipoDeRecurso.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTipoDeRecurso.setBounds(89, 116, 70, 15);
 		contentPane.add(lblTipoDeRecurso);
 		
 		JComboBox<String> cbxTipoRecurso = new JComboBox<String>();
 
 		cbxTipoRecurso.setModel(new DefaultComboBoxModel<String>(new String[] {"Selecione um item", "ESTEIRA", "CABECEIRA", "PORTÃO DE EMBARQUE", "HELIPONTO", "POSIÇÃO NO PÁTIO"}));
-		cbxTipoRecurso.setBounds(190, 116, 140, 24);
+		cbxTipoRecurso.setBounds(190, 116, 219, 24);
 		contentPane.add(cbxTipoRecurso);
 
 		
-		JLabel lblRecurso = new JLabel("Recurso");
-		lblRecurso.setBounds(92, 170, 70, 24);
-		contentPane.add(lblRecurso);
+		JLabel lblNome = new JLabel("Nome");
+		lblNome.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNome.setBounds(89, 170, 70, 24);
+		contentPane.add(lblNome);
 		
 		cbxNomeRecurso = new JComboBox<String>();
 		cbxNomeRecurso.addMouseListener(new MouseAdapter() {
@@ -116,7 +121,8 @@ public class CadRecursosPorProprietario extends JFrame {
 		contentPane.add(cbxNomeRecurso);
 		
 		JLabel lblPrioridade = new JLabel("Prioridade");
-		lblPrioridade.setBounds(81, 206, 81, 15);
+		lblPrioridade.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPrioridade.setBounds(78, 206, 81, 15);
 		contentPane.add(lblPrioridade);
 		
 		txtPrioridade = new JTextField();

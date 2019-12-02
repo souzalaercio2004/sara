@@ -196,8 +196,8 @@ public class CadHotran extends JFrame {
 				hotran.setNumeroVooDecola(Integer.valueOf(txtNumeroVooDecola.getText()));
 				hotran.setHorarioPrevistoPouso(LocalTime.parse(txtHorarioPrevPouso.getText()));				
 				hotran.setHorarioPrevistoDecolagem(LocalTime.parse((txtHorarioPrevDecolagem.getText())));
-				hotran.setEscalasOrigem(txtEscalasHorigem.getText());
-				hotran.setEscalasDestino(txtEscalasDeDestino.getText());
+				hotran.setEscalasOrigem(txtEscalasHorigem.getText().toUpperCase());
+				hotran.setEscalasDestino(txtEscalasDeDestino.getText().toUpperCase());
 				hotran.setInicioVigencia(Converte.converteStringToLocalDateNoFormatoDDMMAAAA(txtInicioDaVigencia.getText(), "dd/MM/yyyy"));
 				hotran.setFimVigencia(Converte.converteStringToLocalDateNoFormatoDDMMAAAA(txtFimDaVigencia.getText(), "dd/MM/yyyy"));
 				
@@ -242,8 +242,8 @@ public class CadHotran extends JFrame {
 				hotran.setNumeroVooDecola(Integer.valueOf(txtNumeroVooDecola.getText()));
 				hotran.setHorarioPrevistoPouso(LocalTime.parse(txtHorarioPrevPouso.getText()));				
 				hotran.setHorarioPrevistoDecolagem(LocalTime.parse(txtHorarioPrevDecolagem.getText()));
-				hotran.setEscalasOrigem(txtEscalasHorigem.getText());
-				hotran.setEscalasDestino(txtEscalasDeDestino.getText());
+				hotran.setEscalasOrigem(txtEscalasHorigem.getText().toUpperCase());
+				hotran.setEscalasDestino(txtEscalasDeDestino.getText().toUpperCase());
 				hotran.setInicioVigencia(Converte.converteStringToLocalDateNoFormatoDDMMAAAA(txtInicioDaVigencia.getText(), "dd/MM/yyyy"));
 				hotran.setFimVigencia(Converte.converteStringToLocalDateNoFormatoDDMMAAAA(txtFimDaVigencia.getText(), "dd/MM/yyyy"));
 				

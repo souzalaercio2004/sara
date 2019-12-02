@@ -13,24 +13,30 @@ import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class VooGrupoIDAO {
 	public void inserir(VooGrupoI vooGrupoI)throws SQLException {
-		String sql= "INSERT INTO VooGrupoI(Voo_idVoo, Hotran_idHotran, numeroDoVoo, horaConfirmadaPouso, horaConfirmadaDecolagem)"+
-					"VALUES(?, ?, ?, ?, ?)";
+		String sql= "INSERT INTO VooGrupoI(Voo_idVoo, Hotran_idHotran, numeroDoVooPouso, numeroDoVooDecolagem,"
+				+ " horaConfirmadaPouso, horaConfirmadaDecolagem, ProprietarioCiaAerea_idCiaAerea)"+
+					"VALUES(?, ?, ?, ?, ?, ?, ?)";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		
 		try {
 			con= ConnectionFactory.criarConexao();
-			if (con != null) System.out.println("Conexão bem sucedida" + con);
+			con.setAutoCommit(false);
+			
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1, vooGrupoI.getIdVoo());
 			pstm.setInt(2, vooGrupoI.getIdHotran());
-			pstm.setInt(3, vooGrupoI.getNumeroVoo());
-			pstm.setTime(4, Time.valueOf(vooGrupoI.getHoraConfirmadaPouso()));
-			pstm.setTime(5, Time.valueOf(vooGrupoI.getHoraConfirmadaDecolagem()));
+			pstm.setInt(3, vooGrupoI.getNumeroVooPouso());
+			pstm.setInt(4, vooGrupoI.getNumeroVooDecolagem());
+			pstm.setTime(5, Time.valueOf(vooGrupoI.getHoraConfirmadaPouso()));
+			pstm.setTime(6, Time.valueOf(vooGrupoI.getHoraConfirmadaDecolagem()));
+			pstm.setInt(7, vooGrupoI.getIdProprietarioCiaAerea());
 			
 			pstm.execute();
+			con.commit();
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Voo do GrupoI invalido!");
+			e.printStackTrace();
 		}finally {
 			con.close();
 		}
@@ -73,21 +79,23 @@ public class VooGrupoIDAO {
 	}
 	public void alterar(VooGrupoI vooGrupoI)throws Exception {
 		
-		String sql = "UPDATE VooGrupoI SET Voo_idVoo=?, Hotran_idHotran=?, numeroDoVoo=?, horaConfirmadaPouso=?, horaConfirmadaDecolagem=? WHERE id=?";
+		String sql = "UPDATE VooGrupoI SET Voo_idVoo=?, Hotran_idHotran=?, numeroDoVooPouso=?, numeroDoVooDecolagem= ?, horaConfirmadaPouso=?, horaConfirmadaDecolagem=?, ProprietarioCiaAerea_idCiaAerea= ? WHERE idVooGrupoI=?";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
-			
+			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1,  vooGrupoI.getIdVoo());
 			pstm.setInt(2,  vooGrupoI.getIdHotran());
-			pstm.setInt(3,  vooGrupoI.getNumeroVoo());
-			pstm.setTime(4, Time.valueOf(vooGrupoI.getHoraConfirmadaPouso()));
-			pstm.setTime(5, Time.valueOf(vooGrupoI.getHoraConfirmadaDecolagem()));
+			pstm.setInt(3,  vooGrupoI.getNumeroVooPouso());
+			pstm.setInt(4,  vooGrupoI.getNumeroVooDecolagem());
+			pstm.setTime(5, Time.valueOf(vooGrupoI.getHoraConfirmadaPouso()));
+			pstm.setTime(6, Time.valueOf(vooGrupoI.getHoraConfirmadaDecolagem()));
+			pstm.setInt(7,  vooGrupoI.getIdProprietarioCiaAerea());
 			
 			pstm.executeUpdate();
-			
+			con.commit();
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados do voo do grupo I");
 		}finally {
