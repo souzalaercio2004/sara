@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.Proprietario;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class ProprietarioDAO {
 	
@@ -29,7 +29,7 @@ public class ProprietarioDAO {
 			pstm.setString(1, proprietario.getNomeProprietario());
 			pstm.execute();
 			con.commit();
-			JOptionPane.showMessageDialog(null, "Proprietario cadastrado com sucesso!");
+			
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Proprietario invalido!");
 			e.printStackTrace();
@@ -39,7 +39,7 @@ public class ProprietarioDAO {
 	}
 	
 	public void selecionar() {
-		String sql= "SELECT * FROM Proprietario ORDER BY idProprietario ASC";
+		String sql= "SELECT * FROM Proprietario ORDER BY nomeDoProprietario ASC";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -61,7 +61,7 @@ public class ProprietarioDAO {
 	}
 	
 	public int selecionarMaximoID() {
-		String sql= "SELECT MAX(idProprietario) AS maxId FROM Proprietario";
+		String sql= "SELECT MAX(idProprietario) as  idProprietario FROM Proprietario";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -72,9 +72,8 @@ public class ProprietarioDAO {
 			ResultSet result = pstm.executeQuery();
 			con.commit();
 			if (result.next()) {
-				return (Integer.valueOf(result.getInt(1)));
-			}else return (0);
-			
+				return (result.getInt(1));
+			}
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existe proprietario cadastrado!");
 			e.printStackTrace();	
@@ -96,7 +95,7 @@ public class ProprietarioDAO {
 			con.commit();
 			
 			if (result.next()) {
-				proprietario.setIdProprietario(result.getInt(1));
+				proprietario.setIdProprietario(result.getInt("idProprietario"));
 				proprietario.setNomeProprietario(result.getString("nomeDoProprietario"));
 				
 				return(proprietario);
@@ -130,8 +129,8 @@ public class ProprietarioDAO {
 		return (0);
 	}
 	
-	public ArrayList<String> selecionarProprietario() { //retorna o equipamento
-		ArrayList<String> prop= new ArrayList<String>();
+	public ArrayList<String> selecionarProprietario() { 
+		ArrayList<String> prop= new ArrayList<>();
 		
 		String sql= "SELECT * FROM Proprietario ORDER BY nomeDoProprietario ASC";
 		
@@ -140,17 +139,49 @@ public class ProprietarioDAO {
 		try {
 			con= ConnectionFactory.criarConexao();
 			pstm= con.prepareStatement(sql);
-			ResultSet result = pstm.executeQuery(sql);
+			ResultSet result = pstm.executeQuery();
 			
 			while (result.next()) {
 				prop.add(result.getString("nomeDoProprietario"));
 			}
 			
 		}catch (Exception e){
-			JOptionPane.showMessageDialog(null, "Não existem proprietários cadastrados!");
+			JOptionPane.showMessageDialog(null, "Não existem proprietários cadastrados! "+e.getMessage());
 			return null;
 		}
 		return (prop);
+	}
+	
+	public int selecionarIdProprietarioByName(String nome) { //retorna o equipamento
+		
+		int idProp;
+		String sql= "SELECT * FROM Proprietario where nomeDoProprietario= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		ResultSet result= null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Falha na conexão");
+			e.printStackTrace();
+		}
+			try {
+				pstm= con.prepareStatement(sql);
+				pstm.setString(1, nome);
+				result = pstm.executeQuery();
+				con.commit();
+				if (result.next()) {
+					idProp= result.getInt("idProprietario");
+					return (idProp);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Não existe proprietario com este nome: "+ nome);
+				e.printStackTrace();
+			}
+			return (0);
+				
 	}
 	
 	public void alterar (Proprietario proprietario) throws Exception {
@@ -168,7 +199,6 @@ public class ProprietarioDAO {
 			pstm.executeUpdate();
 			con.commit();
 		}catch (Exception e) {
-			//JOptionPane.showMessageDialog(null, "Falha na atualização do proprietario");
 			e.printStackTrace();
 			
 		}finally {

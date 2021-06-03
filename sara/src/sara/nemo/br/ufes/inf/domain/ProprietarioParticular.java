@@ -5,6 +5,7 @@ public class ProprietarioParticular extends Proprietario{
 	int id;
 	boolean querAbastecimento;
 	String tipoCombustivel;
+	int idVooGrupoII;
 	
 	public ProprietarioParticular(){
 		super();
@@ -29,6 +30,14 @@ public class ProprietarioParticular extends Proprietario{
 	}
 	public void setTipoCombustivel(String tipoCombustivel) {
 		this.tipoCombustivel = tipoCombustivel;
+	}
+
+	public int getIdVooGrupoII() {
+		return idVooGrupoII;
+	}
+
+	public void setIdVooGrupoII(int idVooGrupoII) {
+		this.idVooGrupoII = idVooGrupoII;
 	}
 	
 	

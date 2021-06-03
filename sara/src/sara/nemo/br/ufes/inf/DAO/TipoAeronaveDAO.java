@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.TipoAeronave;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class TipoAeronaveDAO {
 	
@@ -59,6 +59,34 @@ public class TipoAeronaveDAO {
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem tipos de aeronave cadastrados!");
 		}
+	}
+	
+	public TipoAeronave selecionarTipoAeronave(int id) {
+		TipoAeronave tipoAeronave= new TipoAeronave();
+		String sql= "SELECT * FROM TipoAeronave WHERE idTipoAeronave= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1, id);
+			ResultSet result = pstm.executeQuery();
+			while (result.next()) {
+				tipoAeronave.setIdTipoAeronave(result.getInt("idTipoAeronave"));
+				tipoAeronave.setEquipamento(result.getString("equipamento"));
+				tipoAeronave.setComprimento(result.getFloat("comprimento"));
+				tipoAeronave.setEnvergadura(result.getFloat("envergadura"));
+				tipoAeronave.setPmd(result.getInt("pmd"));
+				
+				return tipoAeronave;
+			} 
+			con.commit();
+		}catch (Exception e){
+				JOptionPane.showMessageDialog(null, "Não existem tipos de aeronave cadastrados com este codigo ! "+e.getMessage());
+		}
+		return null;
 	}
 	
 	public ArrayList<String> selecionarEquipamento() { //retorna o equipamento
@@ -134,6 +162,37 @@ public int selecionarId(String equip) { //retorna o equipamento
 		return (0);
 	}
 	
+public TipoAeronave selecionarByEquipamento(String equip) { //retorna o equipamento
+	TipoAeronave tipoAeronave= new TipoAeronave();
+	
+	String sql= "SELECT * FROM sara.TipoAeronave where equipamento= ?";
+	
+	Connection con= null;
+	PreparedStatement pstm = null;
+	try {
+		con= ConnectionFactory.criarConexao();
+		pstm= con.prepareStatement(sql);
+		pstm.setString(1, equip);
+		ResultSet result = pstm.executeQuery();
+		
+		if (result.next()) {
+			tipoAeronave.setIdTipoAeronave(result.getInt(1));
+			tipoAeronave.setEquipamento(result.getString(2));
+			tipoAeronave.setComprimento(result.getFloat(3));
+			tipoAeronave.setEnvergadura(result.getFloat(4));
+			tipoAeronave.setPmd(result.getFloat(5));
+			
+			return (tipoAeronave);
+		}
+		
+	}catch (Exception e){
+		JOptionPane.showMessageDialog(null, "Equipamento não cadastrado!");
+		e.printStackTrace();
+		
+	}
+	return (null);
+}
+
 	public void selecionarById(int id) {
 		String sql= "SELECT * FROM TipoAeronave WHERE idTipoAeronave= ?";
 		

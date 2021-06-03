@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.PosicaoPatio;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class PosicaoPatioDAO {
 	public void inserir(PosicaoPatio posicaoPatio)throws SQLException {
@@ -31,14 +31,15 @@ public class PosicaoPatioDAO {
 			pstm.setString	(5, posicaoPatio.getAeronaveCritica());
 			pstm.execute();
 			con.commit();
+			
 			JOptionPane.showMessageDialog(null, "Posicão no patio cadastrada com sucesso!");
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Posicão invalida!");
 			e.printStackTrace();
 			
 		}finally {
-			con.close();
-		}
+		     con.close();
+		  }
 	}
 	
 	public void selecionar() {
@@ -63,13 +64,126 @@ public class PosicaoPatioDAO {
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem Posições cadastradas!");
 		}
-			
+		
+	}
+	
+	//Seleciona a posicao mais prioritaria para o proprietario ainda não alocada a outra aeronave
+	public PosicaoPatio selecionarPosicaoPatio(int idProprietario) {
+		PosicaoPatio posicao= new PosicaoPatio();
+		String sql= "select * from Recurso inner join RecursosPorProprietario "
+				+ "inner join PosicaoPatio inner join Proprietario "
+				+ "where Recurso_idRecurso= idRecurso and idPosicaoPatio= idRecurso "
+				+ "and idProprietario= Proprietario_idProprietario and estaEmUso= 'false' "
+				+ "and idProprietario= ? order by Prioridade asc";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
 		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			con= ConnectionFactory.criarConexao();
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1,idProprietario);
+			ResultSet result = pstm.executeQuery();
+			
+			if (result.next()) {
+				posicao.setIdPosicaoPatio(result.getInt("idPosicaoPatio"));
+				posicao.setNome(result.getString("nome"));
+				posicao.setComprimentoToleravel(result.getFloat("comprimentoToleravel"));
+				posicao.setEnvergaduratoleravel(result.getFloat("envergaduraToleravel"));
+				posicao.setAeronaveCritica(result.getString("aeronaveCritica"));
+				return posicao;
+			}
+			
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem Posições cadastradas para este proprietario !"+idProprietario );
 		}
+		return (null);	
+		
+	}
+	
+	public PosicaoPatio selecionarPosicaoPatioById(int idPosicaoPatio) {
+		PosicaoPatio posicao= new PosicaoPatio();
+		String sql= "select * from PosicaoPatio where idPosicaoPatio= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1,idPosicaoPatio);
+			ResultSet result = pstm.executeQuery();
+			
+			if (result.next()) {
+				posicao.setIdPosicaoPatio(result.getInt("idPosicaoPatio"));
+				posicao.setNome(result.getString("nome"));
+				posicao.setComprimentoToleravel(result.getFloat("comprimentoToleravel"));
+				posicao.setEnvergaduratoleravel(result.getFloat("envergaduraToleravel"));
+				posicao.setAeronaveCritica(result.getString("aeronaveCritica"));
+				return posicao;
+			}
+			
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem Posições cadastradas com este codigo "+idPosicaoPatio);
+		} 
+		return (null);
+		
+	}
+	
+	public PosicaoPatio selecionarPosicaoPatioByNome(String nome) {
+		PosicaoPatio posicao= new PosicaoPatio();
+		String sql= "select * from PosicaoPatio where nome= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			pstm= con.prepareStatement(sql);
+			pstm.setString(1,nome);
+			ResultSet result = pstm.executeQuery();
+			
+			if (result.next()) {
+				posicao.setIdPosicaoPatio(result.getInt("idPosicaoPatio"));
+				posicao.setNome(result.getString("nome"));
+				posicao.setComprimentoToleravel(result.getFloat("comprimentoToleravel"));
+				posicao.setEnvergaduratoleravel(result.getFloat("envergaduraToleravel"));
+				posicao.setAeronaveCritica(result.getString("aeronaveCritica"));
+				return posicao;
+			}
+			
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem Posições cadastradas com este nome "+nome);
+		} 
+		return (null);
+		
+	}
+	
+	public PosicaoPatio selecionarPosicaoPatioByIdVoo(int idVoo) {
+		PosicaoPatio posicao= new PosicaoPatio();
+		String sql= "select * from Voo inner join OcorrenciaVoo inner join RecursoEmOcorrenciaVoo \n" + 
+				"inner join Recurso inner join PosicaoPatio where idVoo= Voo_idVoo \n" + 
+				"and OcorrenciaVoo_idOcorrenciaVoo= idOcorrenciaVoo and Recurso_idRecurso=idRecurso \n" + 
+				"and idRecurso= idPosicaoPatio and idVoo= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1,idVoo);
+			ResultSet result = pstm.executeQuery();
+			
+			if (result.next()) {
+				posicao.setIdPosicaoPatio(result.getInt("idPosicaoPatio"));
+				posicao.setNome(result.getString("nome"));
+				posicao.setComprimentoToleravel(result.getFloat("comprimentoToleravel"));
+				posicao.setEnvergaduratoleravel(result.getFloat("envergaduraToleravel"));
+				posicao.setAeronaveCritica(result.getString("aeronaveCritica"));
+				return posicao;
+			}
+			
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem Posições cadastradas para este Código de voo "+idVoo);
+		} 
+		return (null);
 		
 	}
 	
@@ -114,7 +228,6 @@ public class PosicaoPatioDAO {
 			while (result.next()) {
 				posicoes.add(result.getString("nome"));
 			}
-			con.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,8 +287,6 @@ public class PosicaoPatioDAO {
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existe posicao cadastrada com este codigo!");
 			e.printStackTrace();
-		}finally {
-			con.close();
 		}
 		return (null);
 	}
@@ -190,7 +301,6 @@ public class PosicaoPatioDAO {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			//pstm.setInt(1, posicaoPatio.getIdPosicaoPatio());
 			pstm.setString(1, posicaoPatio.getNome());
 			pstm.setFloat(2, posicaoPatio.getComprimentoToleravel());
 			pstm.setFloat(3, posicaoPatio.getEnvergaduratoleravel());
@@ -204,8 +314,6 @@ public class PosicaoPatioDAO {
 			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados da posição");
 			e.printStackTrace();
 			
-		}finally {
-			con.close();
 		}
 		
 	}

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.Frequencia;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class FrequenciaDAO {
 	public void inserir(Frequencia frequencia)throws SQLException {

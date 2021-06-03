@@ -4,15 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import sara.nemo.br.ufes.inf.acessorios.AcessoriosRecursosPorProprietario;
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.Recurso;
 import sara.nemo.br.ufes.inf.domain.RecursosPorProprietario;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
+import sara.nemo.br.ufes.inf.view.accessorios.AcessoriosRecursosPorProprietario;
 
 public class RecursosPorProprietarioDAO {
 	
@@ -33,18 +34,21 @@ public class RecursosPorProprietarioDAO {
 			pstm.setInt(3, recursosPorProprietario.getPrioridade());
 			pstm.execute();
 			con.commit();
-		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Recurso por proprietario não foi cadastrado!");
-			e.printStackTrace();
+		}catch (SQLIntegrityConstraintViolationException e) {
+			JOptionPane.showMessageDialog(null, "Recurso por proprietário já esta cadastrado");
+			
+			
+			con.rollback();
+		}catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, "Recurso por proprietario não cadastrado"+e1.getMessage());
+			
 			con.rollback();
 		}finally {
 			con.close();
 		}
 	}
 	public void selecionar() {
-		String sql= "select idRecurso, tipoRecurso, nome, Prioridade, estaEmUso from PosicaoPatio"
-				+ " inner join RecursosPorProprietario inner join Recurso"
-				+ " where idPosicaoPatio= Recurso_idRecurso and idPosicaoPatio= idRecurso";
+		String sql= "select idRecurso, nomeDoProprietario, tipoRecurso, nome, Prioridade, estaEmUso from PosicaoPatio inner join RecursosPorProprietario inner join Recurso inner join Proprietario where idPosicaoPatio= Recurso_idRecurso and idPosicaoPatio= idRecurso and Proprietario_idProprietario= idProprietario";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -56,17 +60,24 @@ public class RecursosPorProprietarioDAO {
 			
 			while (result.next()) {
 				System.out.println(result.getInt("idRecurso")
+						+" "+result.getString("nomeDoProprietario")
 						+" "+result.getString("tipoRecurso")
 						+" "+result.getString("nome") 
 						+"  "+result.getInt("Prioridade")+
-						"  "+result.getString("estaEmUso"));
-				
+						"  "+result.getString("estaEmUso"));	
 			}
 
 			
 		}catch (Exception e){
 			e.printStackTrace();
 			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}	
@@ -95,11 +106,19 @@ public class RecursosPorProprietarioDAO {
 				
 				recprop.add(acessorios);
 			}
+			con.close();
 			return recprop;
 			
 		}catch (Exception e){
 			e.printStackTrace();
 			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
@@ -116,13 +135,16 @@ public class RecursosPorProprietarioDAO {
 		pstm.setInt(1, idProprietario);
 		pstm.setInt(2, idRecurso);
 		ResultSet result = pstm.executeQuery();
-		con.commit();
+		//con.commit();
 		while (result.next()) {
 			recursosPorProprietario.setIdProprietario(result.getInt("Proprietario_idProprietario"));
 			recursosPorProprietario.setIdRecurso(result.getInt("Recurso_idRecurso"));
 			recursosPorProprietario.setPrioridade(result.getInt("prioridade"));
+			con.close();
 			return (recursosPorProprietario);
 		}
+		con.close();
+		
 		return (null);
 	}
 	
@@ -143,14 +165,16 @@ public class RecursosPorProprietarioDAO {
 			recurso.setTipoRecurso(result.getString("tipoRecurso"));
 			recurso.setLocalizacao(result.getString(("localizacao")));
 			recurso.setEstaEmUso(Boolean.valueOf(result.getBoolean("estaEmUso")));
+			con.close();
 			return (recurso);
 		}
+		con.close();
 		return (null);
 	}
 	
 public void alterar(RecursosPorProprietario recursosPorProprietario)throws Exception {
 		
-		String sql = "UPDATE RecursosPorProprietario SET Prioridade=? WHERE Recurso_idRecurso= ? and Proprietario_idProprietario=?";
+		String sql = "update RecursosPorProprietario set Prioridade= ? where Recurso_idRecurso= ? and Proprietario_idProprietario=?";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
@@ -168,7 +192,7 @@ public void alterar(RecursosPorProprietario recursosPorProprietario)throws Excep
 			
 			JOptionPane.showMessageDialog(null, "Alteração bem sucedida!");
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados");
+			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados" +e.getMessage());
 			e.printStackTrace();
 			
 		}finally {
@@ -176,8 +200,8 @@ public void alterar(RecursosPorProprietario recursosPorProprietario)throws Excep
 		}		
 	}
 	
-	public void apagar(int id){
-		String sql = "DELETE FROM RecursosPorProprietario WHERE Recurso_idRecurso=?";
+	public void apagar(int idRecurso, int idProprietario){
+		String sql = "DELETE FROM RecursosPorProprietario WHERE Recurso_idRecurso=? and Proprietario_idProprietario=?";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		
@@ -186,14 +210,23 @@ public void alterar(RecursosPorProprietario recursosPorProprietario)throws Excep
 			con.setAutoCommit(false);
 			
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, id);
+			pstm.setInt(1, idRecurso);
+			pstm.setInt(2, idProprietario);
+			
 			pstm.executeUpdate();
 			
 			con.commit();
 			JOptionPane.showMessageDialog(null, "Dados excluidos com sucesso!");
 			}catch (Exception e){
-				JOptionPane.showMessageDialog(null, "Não existe Recurso por proprietario com este id: "+id);
+				JOptionPane.showMessageDialog(null, "Não existe Recurso por proprietario com estes dados");
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 }

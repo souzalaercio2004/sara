@@ -23,7 +23,4 @@ public class PosicaoHeliponto extends Recurso{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	
-	
 }

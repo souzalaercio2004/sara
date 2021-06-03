@@ -1,19 +1,21 @@
 package sara.nemo.br.ufes.inf.domain;
 
 public class Aeronave {
-	int id;
+	int idAeronave;
 	private String matricula;
 	private String tipoAsa;
 	private int idTipoAeronave;
+	private int idProprietario;
 	
+
 	public Aeronave() {
-		//this.proprietarios= new ArrayList<Proprietario>();
+
 	}
-	public int getId() {
-		return id;
+	public int getIdAeronave() {
+		return idAeronave;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setIdAeronave(int idAeronave) {
+		this.idAeronave = idAeronave;
 	}
 	
 	public String getMatricula() {
@@ -39,6 +41,15 @@ public class Aeronave {
 		this.matricula = matricula;
 		this.tipoAsa = tipoAsa;
 	}
+	public int getIdProprietario() {
+		return idProprietario;
+	}
+	public void setIdProprietario(int idProprietario) {
+		this.idProprietario = idProprietario;
+	}
 	
-	
+	public String toString() {
+		String aeronave= idAeronave+" "+matricula+" "+tipoAsa+" "+idTipoAeronave+" "+ idProprietario;
+		return aeronave;
+	}
 }

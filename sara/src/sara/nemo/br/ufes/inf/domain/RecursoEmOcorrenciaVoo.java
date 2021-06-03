@@ -22,4 +22,7 @@ public class RecursoEmOcorrenciaVoo{
 		this.idOcorrenciaVoo = idOcorrenciaVoo;
 	}	
 	
+	public String toString() {
+		return(idRecurso+" -> "+idOcorrenciaVoo);
+	}
 };

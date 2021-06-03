@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.ProprietarioCiaAerea;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class ProprietarioCiaAereaDAO {
 	
@@ -40,7 +40,7 @@ public class ProprietarioCiaAereaDAO {
 	}
 	
 	public void selecionar() {
-		String sql= "SELECT * FROM ProprietarioCiaAerea inner join Proprietario where Proprietario.idProprietario=ProprietarioCiaAerea.idCiaAerea ORDER BY idCiaAerea ASC";
+		String sql= "SELECT * FROM ProprietarioCiaAerea ORDER BY idCiaAerea ASC";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -49,10 +49,10 @@ public class ProprietarioCiaAereaDAO {
 			con= ConnectionFactory.criarConexao();
 			
 			pstm= con.prepareStatement(sql);
-			ResultSet result = pstm.executeQuery();
+			ResultSet result = pstm.executeQuery(sql);
 			
 			while (result.next()) {
-				System.out.println(result.getInt(1) + "\t" +String.format("%-15s", result.getString("sigla"))+ "\t" +String.format("%-15s", result.getString("nomeDoProprietario")));
+				System.out.println(result.getInt("idCiaAerea") + "\t" +String.format("%-15s", result.getString("sigla")));
 			}
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem proprietarios de companhias aéreas cadastrados!");
@@ -91,7 +91,8 @@ public class ProprietarioCiaAereaDAO {
 	
 	public ProprietarioCiaAerea selecionarById(int id) {
 		ProprietarioCiaAerea proprietarioCiaAerea= new ProprietarioCiaAerea();
-		String sql= "SELECT * FROM ProprietarioCiaAerea WHERE idCiaAerea= ?";
+		String sql= "SELECT * FROM ProprietarioCiaAerea inner join Proprietario"
+				+ " WHERE idCiaAerea= idProprietario and idCiaAerea= ?";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -105,7 +106,7 @@ public class ProprietarioCiaAereaDAO {
 			
 			if (result.next()) {
 				proprietarioCiaAerea.setIdCiaAerea(result.getInt(1));
-				proprietarioCiaAerea.setIdProprietario(result.getInt("Proprietario_idProprietario"));
+				//proprietarioCiaAerea.setIdProprietario(result.getInt("Proprietario_idProprietario"));
 				proprietarioCiaAerea.setSiglaCiaAerea(result.getString("sigla"));
 				
 				
@@ -142,21 +143,21 @@ public class ProprietarioCiaAereaDAO {
 	
 	public void alterar (ProprietarioCiaAerea proprietarioCiaAerea) throws Exception {
 		
-		String sql = "UPDATE ProprietarioCiaAerea SET Proprietario_idProprietario=?, sigla=? WHERE idCiaAerea=?";
+		String sql = "UPDATE ProprietarioCiaAerea SET sigla=? WHERE idCiaAerea=?";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
 			
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, proprietarioCiaAerea.getIdProprietario());
+			pstm.setInt(1, proprietarioCiaAerea.getIdCiaAerea());
 			pstm.setString(2, proprietarioCiaAerea.getSiglaCiaAerea());
-			pstm.setInt(3, proprietarioCiaAerea.getIdCiaAerea());
 			
 			pstm.executeUpdate();
-			
+			JOptionPane.showMessageDialog(null, "Dados atualizados com sucesso");
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha na atualização do proprietario de cia aérea");
+			System.out.println(e.getMessage());
 		}finally {
 			con.close();
 		}

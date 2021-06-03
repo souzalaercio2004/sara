@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.Esteira;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class EsteiraDAO {
 	
@@ -62,6 +62,41 @@ public class EsteiraDAO {
 		}
 	}
 	
+	//Seleciona a esteira mais prioritaria para o proprietario ainda não alocada a outra aeronave
+	public Esteira selecionarEsteira(int idProprietario) {
+		Esteira esteira= new Esteira();
+		String sql= "select * from Recurso inner join RecursosPorProprietario "
+				+ "inner join Esteira inner join Proprietario "
+				+ "where Recurso_idRecurso= idRecurso and idRecurso= idEsteiraDeBagagem "
+				+ "and Proprietario_idProprietario= idProprietario "
+				+ "and idProprietario=?  and estaEmUso = 'false' order by Prioridade asc;";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1,idProprietario);
+			ResultSet result = pstm.executeQuery();
+			
+			if (result.next()) {
+				esteira.setIdEsteira(result.getInt("idEsteiraDeBagagem"));
+				esteira.setIdRecurso(result.getInt("idRecurso"));
+				esteira.setEstaEmUso(result.getBoolean("estaEmUso"));
+				esteira.setLocalizacao(result.getString("localizacao"));
+				esteira.setNome(result.getString("nome"));
+				esteira.setTipoRecurso(result.getString("tipoRecurso"));
+				
+				return esteira;
+			}
+			
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem Posições cadastradas para este proprietario !"+idProprietario );
+		}
+		return (null);	
+		
+	}
+	
 	public ArrayList<String> selecionarNomes() {
 		ArrayList<String> nomeEsteira= new ArrayList<String>();
 		String sql= "select * from Esteira order by nome ASC";
@@ -83,11 +118,18 @@ public class EsteiraDAO {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Não existem esteiras cadastradas!");
 			
+		}finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
 	public int selecionarIdDadoNome(String dadoNome) {
-		String sql= "select * from Esteira where nome= dadoNome";
+		String sql= "select * from Esteira where nome= ?";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -95,10 +137,11 @@ public class EsteiraDAO {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
+			pstm.setString(1, dadoNome);
 			ResultSet result = pstm.executeQuery();
 			con.commit();
 			if (result.next()) {
-				return (result.getInt(1));	
+				return (result.getInt("idEsteiraDeBagagem"));	
 			}
 			
 			
@@ -109,10 +152,10 @@ public class EsteiraDAO {
 		}
 		return 0;
 	}
-	public Esteira selecionarById(int numero) {
+	public Esteira selecionarById(int id) {
 		Esteira esteira= new Esteira();
 		
-		String sql= "SELECT * FROM Esteira WHERE nome= ?";
+		String sql= "SELECT * FROM Esteira WHERE idEsteiraDeBagagem= ?";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -120,11 +163,11 @@ public class EsteiraDAO {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, numero);
+			pstm.setInt(1, id);
 			ResultSet result = pstm.executeQuery();
 			con.commit();
 			if (result.next()) {
-				esteira.setIdEsteira(result.getInt(1));
+				esteira.setIdEsteira(result.getInt("idEsteiraDeBagagem"));
 				esteira.setNome(result.getString("nome"));
 				System.out.printf("%d    \t %d  \n", result.getInt(1), result.getInt("nome"));
 			}
@@ -136,21 +179,49 @@ public class EsteiraDAO {
 		
 	}
 	
-	public Esteira selecionarByNumeroDaEsteira(int numero) {
+	public Esteira selecionarEsteiraByIdVoo(int idVoo) {
 		Esteira esteira= new Esteira();
-		String sql= "SELECT * FROM Esteira WHERE numeroDaEsteira = ?";
+		
+		String sql= "select * from Voo inner join OcorrenciaVoo inner join RecursoEmOcorrenciaVoo \n" + 
+				"inner join Recurso inner join Esteira where idVoo= Voo_idVoo \n" + 
+				"and OcorrenciaVoo_idOcorrenciaVoo= idOcorrenciaVoo and Recurso_idRecurso=idRecurso \n" + 
+				"and idRecurso= idEsteiraDeBagagem and idVoo= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1, idVoo);
+			ResultSet result = pstm.executeQuery();
+			con.commit();
+			if (result.next()) {
+				esteira.setIdEsteira(result.getInt("idEsteiraDeBagagem"));
+				esteira.setNome(result.getString("nome"));
+			}
+			return (esteira);
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Nenhuma esteira alocada para este Voo "+idVoo);
+		}
+		return  null;
+	}
+	
+	public Esteira selecionarByNomeDaEsteira(String nome) {
+		Esteira esteira= new Esteira();
+		String sql= "SELECT * FROM Esteira WHERE nome = ?";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, numero);
+			pstm.setString(1, nome);
 			ResultSet result = pstm.executeQuery();
 			
 			while (result.next()) {
 				esteira.setIdRecurso(result.getInt(1));
-				esteira.setNome(result.getString("nuome"));
+				esteira.setNome(result.getString("nome"));
 				return (esteira);
 			}
 		}catch (Exception e){
@@ -175,7 +246,7 @@ public class EsteiraDAO {
 			pstm.executeUpdate();
 			
 			con.commit();
-			JOptionPane.showMessageDialog(null, "Esteira atualizada com sucesso");
+			JOptionPane.showMessageDialog(null, "Esteira atualizada com sucesso "+ esteira.toString());
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha na atualização dos dados da esteira");
 			e.printStackTrace();

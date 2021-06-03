@@ -5,7 +5,6 @@ import java.time.LocalTime;
 
 public class VooGrupoI extends Voo{
 	int idVooGrupoI;
-	int idVoo;
 	int idHotran;
 	int numeroVooPouso;
 	int numeroVooDecolagem;
@@ -14,26 +13,19 @@ public class VooGrupoI extends Voo{
 	LocalTime horaConfirmadaPouso;
 	LocalTime horaConfirmadaDecolagem;
 	int idProprietarioCiaAerea;
-	
+	private int nomeCabeceira;
+	private String nomeBox;
+	private String nomeEsteira;
+	private String portaoDeEmbarque;
+
 	public VooGrupoI() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-	
-
-	public int getIdVoo() {
-		return idVoo;
-	}
-
-
-	public void setIdVoo(int idVoo) {
-		this.idVoo = idVoo;
-	}
-
 
 	public int getIdVooGrupoI() {
 		return idVooGrupoI;
 	}
-
 
 	public void setIdVooGrupoI(int idVooGrupoI) {
 		this.idVooGrupoI = idVooGrupoI;
@@ -106,5 +98,45 @@ public class VooGrupoI extends Voo{
 		this.idProprietarioCiaAerea = idProprietarioCiaAerea;
 	}
 
+	public int getNomeCabeceira() {
+		return nomeCabeceira;
+	}
+
+	public void setNomeCabeceira(int nomeCabeceira) {
+		this.nomeCabeceira = nomeCabeceira;
+	}
+
+	public String getNomeBox() {
+		return nomeBox;
+	}
+
+	public void setNomeBox(String nomeBox) {
+		this.nomeBox = nomeBox;
+	}
+
+	public String getNomeEsteira() {
+		return nomeEsteira;
+	}
+
+	public void setNomeEsteira(String nomeEsteira) {
+		this.nomeEsteira = nomeEsteira;
+	}
 	
+	
+
+	public String getPortaoDeEmbarque() {
+		return portaoDeEmbarque;
+	}
+
+	public void setPortaoDeEmbarque(String portaoDeEmbarque) {
+		this.portaoDeEmbarque = portaoDeEmbarque;
+	}
+
+	public String toString() {
+		String vooGrupoI = idVooGrupoI+" "+ idHotran+" "+numeroVooPouso+" "+numeroVooDecolagem+" "+
+				dataConfirmadaPouso+" "+horaConfirmadaPouso+" "+dataConfirmadaDecolagem+" "+horaConfirmadaDecolagem+" "+
+				idProprietarioCiaAerea+" "+nomeCabeceira+" "+nomeBox+" "+nomeEsteira;
+		
+		return vooGrupoI;
+	}
 }

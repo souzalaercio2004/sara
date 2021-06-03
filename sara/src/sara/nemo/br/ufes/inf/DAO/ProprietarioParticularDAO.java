@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.ProprietarioParticular;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class ProprietarioParticularDAO {
 	public void inserir(ProprietarioParticular proprietarioParticular)throws SQLException {
@@ -33,7 +33,7 @@ public class ProprietarioParticularDAO {
 			JOptionPane.showMessageDialog(null, "Proprietario particular cadastrado com sucesso!");
 			
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Proprietario particular invalido!");
+			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Proprietario particular invalido!"+ e.getMessage());
 			e.printStackTrace();
 		}finally {
 			con.close();
@@ -151,13 +151,11 @@ public class ProprietarioParticularDAO {
 			pstm= con.prepareStatement(sql);
 			pstm.setInt(1, id);
 			
-			int linhas= pstm.executeUpdate();
+			pstm.executeUpdate();
 			con.commit();
-			if (linhas> 0) {
-				JOptionPane.showMessageDialog(null, "Proprietario excluido com sucesso!");
-				}
-			}catch (Exception e){
-				JOptionPane.showMessageDialog(null, "Não existem proprietários com este id: "+ id);
-			}
+			//JOptionPane.showMessageDialog(null, "Proprietario excluido com sucesso!");
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem proprietários com este id: "+ id);
 		}
+	}
 }

@@ -9,6 +9,7 @@ public class OcorrenciaVoo {
 	private LocalDate data;
 	private LocalTime hora;
 	private String situacao;
+	private int idVoo;
 	
 	public OcorrenciaVoo() {};
 	
@@ -50,5 +51,14 @@ public class OcorrenciaVoo {
 	public void setIdAeronave(int idAeronave) {
 		this.idAeronave = idAeronave;
 	}
+
+	public int getIdVoo() {
+		return idVoo;
+	}
+
+	public void setIdVoo(int idVoo) {
+		this.idVoo = idVoo;
+	}
+	
 	
 }

@@ -4,7 +4,7 @@ public class PosicaoPatio extends Recurso {
 	int idPosicaoPatio;
 	private String nome;
 	private float comprimentoToleravel;
-	private float envergaduratoleravel;
+	private float envergaduraToleravel;
 	private String aeronaveCritica;
 	
 	public PosicaoPatio() {
@@ -42,10 +42,10 @@ public class PosicaoPatio extends Recurso {
 		this.comprimentoToleravel = comprimentoToleravel;
 	}
 	public float getEnvergaduratoleravel() {
-		return envergaduratoleravel;
+		return envergaduraToleravel;
 	}
 	public void setEnvergaduratoleravel(float envergaduratoleravel) {
-		this.envergaduratoleravel = envergaduratoleravel;
+		this.envergaduraToleravel = envergaduratoleravel;
 	}
 	public String getAeronaveCritica() {
 		return aeronaveCritica;

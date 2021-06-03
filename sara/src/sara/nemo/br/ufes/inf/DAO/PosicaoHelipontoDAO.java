@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.PosicaoHeliponto;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class PosicaoHelipontoDAO {
 	public void inserir(PosicaoHeliponto posicaoHeliponto)throws SQLException {
@@ -133,6 +133,32 @@ public class PosicaoHelipontoDAO {
 		return (null);
 	}
 	
+	public PosicaoHeliponto selecionarPosicaoHelipontoByIdVoo(int idVoo) {
+		PosicaoHeliponto posicaoHeliponto= new PosicaoHeliponto();
+		String sql= "SELECT * FROM PosicaoHeliponto WHERE idPosicao= ?";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1, idVoo);
+			ResultSet result = pstm.executeQuery();
+			con.commit();
+			if (result.next()) {
+				posicaoHeliponto.setIdPosicaoHeliponto((result.getInt("idPosicao")));
+				posicaoHeliponto.setNome((result.getString(("nome").toUpperCase())));
+				return (posicaoHeliponto);
+			}
+			
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existe posicao no heliponto com este codigo!");
+			e.printStackTrace();
+			
+		}
+		return (null);
+	}
 	
 	public void alterar(PosicaoHeliponto posicaoHeliponto)throws Exception {
 		

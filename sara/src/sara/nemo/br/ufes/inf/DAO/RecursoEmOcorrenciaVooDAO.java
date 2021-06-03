@@ -7,27 +7,30 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.RecursoEmOcorrenciaVoo;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
 
 public class RecursoEmOcorrenciaVooDAO {
-	public void inserir(RecursoEmOcorrenciaVoo RecursoEmOcorrenciaVoo)throws SQLException {
+	public void inserir(RecursoEmOcorrenciaVoo recursoEmOcorrenciaVoo)throws SQLException {
 		String sql= "INSERT INTO RecursoEmOcorrenciaVoo(Recurso_idRecurso, OcorrenciaVoo_idOcorrenciaVoo)"+
 					"VALUES(?, ?)";
 		Connection con= null;
 		PreparedStatement pstm = null;
-		
+		System.out.println("idRecurso: "+recursoEmOcorrenciaVoo.getIdRecurso());
+		System.out.println("id Ocorrencia de Voo: "+recursoEmOcorrenciaVoo.getIdOcorrenciaVoo());
 		try {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
-			pstm.setInt(1, RecursoEmOcorrenciaVoo.getIdRecurso());
-			pstm.setInt(2, RecursoEmOcorrenciaVoo.getIdOcorrenciaVoo());
-			
+			pstm.setInt(1, recursoEmOcorrenciaVoo.getIdRecurso());
+			pstm.setInt(2, recursoEmOcorrenciaVoo.getIdOcorrenciaVoo());
+			System.out.println(" id do Recurso: "+recursoEmOcorrenciaVoo.getIdRecurso());
+			System.out.println("Id da Ocorrencia de Voo: "+recursoEmOcorrenciaVoo.getIdRecurso());
 			pstm.execute();
 			con.commit();
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Dados invalidos!");
+			JOptionPane.showMessageDialog(null, "Falha no Cadastro  de Recursos em Ocorrencia de voo linha 30:Dados invalidos!" +recursoEmOcorrenciaVoo.toString());
+			e.printStackTrace();
 		}finally {
 			con.close();
 		}

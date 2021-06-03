@@ -31,5 +31,8 @@ public class RecursosPorProprietario {
 		this.prioridade = prioridade;
 	};
 	
+	public String toString() {
+		return (idProprietario+" "+idRecurso+" "+ prioridade);
+	}
 	
 }

@@ -21,5 +21,7 @@ public class Esteira extends Recurso {
 		this.nome = nome;
 	}
 
-
+	public String toString() {
+		return(idEsteira+ " "+nome);
+	}
 }

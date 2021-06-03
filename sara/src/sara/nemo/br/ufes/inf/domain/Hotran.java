@@ -4,20 +4,18 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Hotran {
-		int id;
+		private int id;
 		private int idCiaAerea;
-		int idFrequencia;
+		private int idFrequencia;
 		private int numeroVooPousa;
 		private int numeroVooDecola;
 		private LocalTime horarioPrevistoPouso;
 		private LocalTime horarioPrevistoDecolagem;
 		private String escalasOrigem;
 		private String escalasDestino;
+		private String equipamento;
 		private LocalDate inicioVigencia;
 		private LocalDate fimVigencia;
-		//private Frequencia frequencia;
-		
-
 
 		public Hotran() {}
 
@@ -93,6 +91,16 @@ public class Hotran {
 		public void setEscalasDestino(String escalasDestino) {
 			this.escalasDestino = escalasDestino;
 		}
+		
+		
+		
+		public String getEquipamento() {
+			return equipamento;
+		}
+
+		public void setEquipamento(String equipamento) {
+			this.equipamento = equipamento;
+		}
 
 		public LocalDate getInicioVigencia() {
 			return inicioVigencia;
@@ -109,7 +117,7 @@ public class Hotran {
 		public void setFimVigencia(LocalDate fimVigencia) {
 			this.fimVigencia = fimVigencia;
 		}
-
+		
 		
 
 		//implementar toString para colocar frequencia no formato DSTQQSS

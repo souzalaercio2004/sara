@@ -9,17 +9,17 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.Categoria;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
-import sara.nemo.br.ufes.inf.item.ItemCategoria;
+import sara.nemo.br.ufes.inf.domain.item.ItemCategoria;
 
 public class CategoriaDAO {
 	public void inserir(Categoria cat)throws SQLException {
 		String sql= "INSERT INTO Categoria(classe, passageiroOuCargueiro, especificacao, tipo)"+
-					"VALUES(?, ?, ?, ?)";
+				"VALUES(?, ?, ?, ?)";
 		Connection con= null;
 		PreparedStatement pstm = null;
-		
+
 		try {
 			con= ConnectionFactory.criarConexao();
 			if (con != null) {
@@ -33,23 +33,30 @@ public class CategoriaDAO {
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha no Cadastro: Categoria invalida!");
 			e.printStackTrace();
-		}finally {
-			con.close();
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	public void selecionar() {
 		String sql= "SELECT * FROM Categoria ORDER BY idCategoria ASC";
-		
+
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
-			
+
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
 			ResultSet result = pstm.executeQuery();
-			
+
 			while (result.next()) {
 				System.out.println(result.getInt(1) + "\t" +String.format("%-15s", result.getString("classe"))+ String.format("%-12s", result.getString("passageiroOuCargueiro"))+ String.format("%-9s", result.getString("especificacao"))+ "\t"+ result.getString("tipo"));
 			}
@@ -57,8 +64,55 @@ public class CategoriaDAO {
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
 			e.printStackTrace();
-			
+
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
+	}
+	public int selecionarIdCategoria(String tipox, String passageiroOuCargueirox, String classex, String especificacaox) {
+		String sql= "SELECT idCategoria FROM sara.Categoria WHERE tipo = ? and passageiroOuCargueiro= ? and classe= ? and especificacao= ?";
+
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+
+			pstm.setString(1, tipox);
+			pstm.setString(2, passageiroOuCargueirox);
+			pstm.setString(3, classex);
+			pstm.setString(4, especificacaox);
+
+			ResultSet result = pstm.executeQuery();
+
+			if (result.next()) {
+				return (result.getInt("idCategoria"));
+			}
+
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
+			e.printStackTrace();
+			return (0);
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return(0);	
 	}
 	public List<Categoria> selecionarListaCategoria() {
 		String sql= "select * from Categoria order by tipo asc, passageiroOuCargueiro asc, classe asc";
@@ -83,8 +137,17 @@ public class CategoriaDAO {
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
 			e.printStackTrace();
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		
+
 		return listaCategoria;
 	}
 	public List<ItemCategoria> selecionarLista() {
@@ -94,12 +157,12 @@ public class CategoriaDAO {
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
-			
+
 			con= ConnectionFactory.criarConexao();
-			
+
 			pstm= con.prepareStatement(sql);
 			ResultSet result = pstm.executeQuery(sql);
-			
+
 			while (result.next()) {
 				cat= new Categoria();
 				cat.setId(result.getInt(1));
@@ -109,123 +172,130 @@ public class CategoriaDAO {
 				cat.setTipoCategoria(result.getString("tipo"));
 				ItemCategoria item= new ItemCategoria(cat);
 				lista.add(item);
-				
+
 			}
 			return lista;
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Não existem categorias cadastradas!");
 			e.printStackTrace();
-			
+
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return null;
 	}
-	
+
 	public Categoria selecionarById(int id) {
 		Categoria cat= new Categoria();
 		String sql= "SELECT * FROM sara.Categoria WHERE Categoria.idCategoria = ?";
-		
+
 		Connection con= null;
 		PreparedStatement pstm = null;
 		ResultSet result= null;
-		
+
 		try {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			pstm= con.prepareStatement(sql);
+
+			pstm.setInt(1, id);
+			result = pstm.executeQuery();
+			con.commit();
+			if (result.next()) {
+				cat.setId(result.getInt(1));
+				cat.setClasse(result.getString("classe"));
+				cat.setPassageiroOuCargueiro(result.getString("passageiroOuCargueiro"));
+				cat.setEspecificacao(result.getString("especificacao"));
+				cat.setTipoCategoria(result.getString("tipo"));
+
+				return cat;
+			}
+		}catch (Exception e) {
 			e.printStackTrace();
-		}
-		if (con!= null) {
+		}finally {			
 			try {
-				pstm= con.prepareStatement(sql);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Falha na conexão com o banco de dados");
-				e.printStackTrace();
-				
-			}
-			try {
-				pstm.setInt(1, id);
-				
-			} catch (SQLException e) {
-				System.out.println("valor de id invalido "+ id);
-				e.printStackTrace();
-			}
-			try {
-				result = pstm.executeQuery();
-				con.commit();
-			} catch (SQLException e) {
-				System.out.println("Falha na execução da consulta "+ result);
-				e.printStackTrace();
-			}
-			
-			try {
-				if (result.next()) {
-					cat.setId(result.getInt(1));
-					cat.setClasse(result.getString("classe"));
-					cat.setPassageiroOuCargueiro(result.getString("passageiroOuCargueiro"));
-					cat.setEspecificacao(result.getString("especificacao"));
-					cat.setTipoCategoria(result.getString("tipo"));
-					System.out.println(" E agora: "+cat.toString());
+				if(pstm != null){
+					pstm.close();
 				}
+				con.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
-		return (cat);
-		}else {
-			
-			return (null);
 		}
+		return null;
 	};
-	
-public void alterar(Categoria cat )throws Exception {
-		
+
+	public void alterar(Categoria cat )throws Exception {
+
 		String sql = "UPDATE Categoria SET classe=?, passageiroOuCargueiro=?, especificacao=? , tipo=? WHERE idCategoria=?";
 		Connection con= null;
 		PreparedStatement pstm = null;
 		try {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
-			
+
 			pstm= con.prepareStatement(sql);
-			
+
 			pstm.setString(1, cat.getClasse());
 			pstm.setString(2, cat.getPassageiroOuCargueiro());
 			pstm.setString(3, cat.getEspecificacao());
 			pstm.setString(4, cat.getTipoCategoria());
 			pstm.setInt(5, cat.getId());
-			
+
 			pstm.executeUpdate();
 			con.commit();
-			
+
 			JOptionPane.showMessageDialog(null, "Alteração bem sucedida!");
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Falha na atualização da categoria");
 			e.printStackTrace();
-			
-		}finally {
-			con.close();
+
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}		
 	}
-public void apagar(int id){
-	String sql = "DELETE FROM Categoria WHERE idCategoria=?";
-	Connection con= null;
-	PreparedStatement pstm = null;
-	
-	try {
-		con= ConnectionFactory.criarConexao();
-		con.setAutoCommit(false);
-		pstm= con.prepareStatement(sql);
-		pstm.setInt(1, id);
-		
-		pstm.executeUpdate();
-		con.commit();
-		JOptionPane.showMessageDialog(null, "Categoria excluida com sucesso!");
-		
+	public void apagar(int id){
+		String sql = "DELETE FROM Categoria WHERE idCategoria= ?";
+		Connection con= null;
+		PreparedStatement pstm = null;
+
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			pstm.setInt(1, id);
+			pstm.executeUpdate();
+
+			con.commit();
+			JOptionPane.showMessageDialog(null, "Categoria excluida com sucesso!");
+
 		}catch (Exception e){
 			JOptionPane.showMessageDialog(null, "Código de categoria inválido: "+ id);
+			e.printStackTrace();
+
+		}finally {			
+			try {
+				if(pstm != null){
+					pstm.close();
+				}
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

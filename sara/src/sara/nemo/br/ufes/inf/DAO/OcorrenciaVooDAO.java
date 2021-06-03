@@ -11,42 +11,44 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import sara.nemo.br.ufes.inf.acessorios.AcessoriosOcorrenciaVoo;
+import sara.nemo.br.ufes.inf.DAO.conexao.ConnectionFactory;
 import sara.nemo.br.ufes.inf.domain.OcorrenciaVoo;
-import sara.nemo.br.ufes.inf.factory.ConnectionFactory;
-import sara.nemo.br.ufes.view.Converte;
+import sara.nemo.br.ufes.inf.view.Converte;
+import sara.nemo.br.ufes.inf.view.accessorios.AcessoriosOcorrenciaVoo;
 
 public class OcorrenciaVooDAO {
 	public void inserir(OcorrenciaVoo ocorrenciaVoo)throws SQLException {
-		String sql= "INSERT INTO OcorrenciaVoo(Aeronave_idAeronave, data, hora, situacao)"+
+		String sql= "INSERT INTO OcorrenciaVoo(data, hora, situacao, Voo_idVoo)"+
 					"VALUES(?, ?, ?, ?)";
 		Connection con= null;
 		PreparedStatement pstm = null;
-		
+		System.out.println("Ocorrencia de voo "+ocorrenciaVoo.getIdOcorrenciaVoo()+" "+
+				ocorrenciaVoo.getIdVoo()+" "+ ocorrenciaVoo.getIdAeronave()+" "+ ocorrenciaVoo.getSituacao()+ " "+ocorrenciaVoo.getData()+" "+ocorrenciaVoo.getHora());
 		try {
 			con= ConnectionFactory.criarConexao();
 			con.setAutoCommit(false);
 			pstm= con.prepareStatement(sql);
 			
-			pstm.setInt(1, ocorrenciaVoo.getIdAeronave());
-			pstm.setDate(2, Converte.converterLocalDateToJavaSqlDate(ocorrenciaVoo.getData()));
-			pstm.setTime(3, Converte.converterLocalTimeToJavaSqlTime(ocorrenciaVoo.getHora()));
-			pstm.setString(4, ocorrenciaVoo.getSituacao());
+			pstm.setDate(1, Converte.converterLocalDateToJavaSqlDate(ocorrenciaVoo.getData()));
+			pstm.setTime(2, Converte.converterLocalTimeToJavaSqlTime(ocorrenciaVoo.getHora()));
+			pstm.setString(3, ocorrenciaVoo.getSituacao());
+			pstm.setInt(4, ocorrenciaVoo.getIdVoo());
 			
 			pstm.execute();
 			con.commit();
 		}catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Falha no Cadastro :Ocorrência de voo invalida!");
+			JOptionPane.showMessageDialog(null, "Falha no Cadastro: Ocorrência de voo invalida! "+e.getMessage());
 			e.printStackTrace();
 		}finally {
 			con.close();
 		}
 	}
 	public List<AcessoriosOcorrenciaVoo> selecionarLista() {
-		String sql= "select idOcorrenciaVoo, matricula, equipamento, data, hora, situacao "
-				+ "from OcorrenciaVoo inner join Aeronave inner join TipoAeronave "
-				+ "where Aeronave_idAeronave= idAeronave and"
-				+ " idTipoAeronave= TipoAeronave_idTipoAeronave ORDER BY idOcorrenciaVoo ASC";
+		String sql= "select idOcorrenciaVoo, matricula, equipamento, data, hora, OcorrenciaVoo.situacao  "
+				+ "from OcorrenciaVoo inner join Voo inner join Aeronave "
+				+ "inner join TipoAeronave where Voo_idVoo= idVoo and  "
+				+ "Aeronave_idAeronave= idAeronave "
+				+ "and TipoAeronave_idTipoAeronave= idTipoAeronave ORDER BY idOcorrenciaVoo ASC";
 		
 		Connection con= null;
 		PreparedStatement pstm = null;
@@ -106,6 +108,29 @@ public class OcorrenciaVooDAO {
 		}
 		return null;
 	}
+	
+	public int selecionarMaximoID() {
+		String sql= "SELECT MAX(idOcorrenciaVoo) FROM OcorrenciaVoo";
+		
+		Connection con= null;
+		PreparedStatement pstm = null;
+		try {
+			con= ConnectionFactory.criarConexao();
+			con.setAutoCommit(false);
+			pstm= con.prepareStatement(sql);
+			ResultSet result = pstm.executeQuery();
+			
+			if (result.next()) {
+				return (result.getInt(1));
+			}
+			con.commit();
+		}catch (Exception e){
+			JOptionPane.showMessageDialog(null, "Não existem voos cadastrados!" + e.getMessage());
+			e.printStackTrace();	
+		}
+		return (0);
+	}
+	
 	public void alterar(OcorrenciaVoo ocorrenciaVoo)throws Exception {
 		
 		String sql = "UPDATE OcorrenciaVoo SET Aeronave_idAeronave=? , data=? , hora=? , situacao=? WHERE idOcorrenciaVoo=?";

@@ -3,7 +3,7 @@ package sara.nemo.br.ufes.inf.domain;
 public class Pista extends Recurso {
 	int idPista;
 	private String nome;
-	private String Cabeceira;
+	private String nomeCabeceira;
 
 	public Pista() {}
 
@@ -23,12 +23,12 @@ public class Pista extends Recurso {
 		this.nome = nome;
 	}
 
-	public String getCabeceira() {
-		return Cabeceira;
+	public String getNomeCabeceira() {
+		return nomeCabeceira;
 	}
 
-	public void setCabeceira(String cabeceira) {
-		Cabeceira = cabeceira;
+	public void setNomeCabeceira(String nomeCabeceira) {
+		this.nomeCabeceira= nomeCabeceira;
 	};
 
 	
